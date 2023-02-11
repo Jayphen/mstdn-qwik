@@ -9,6 +9,7 @@ export default defineConfig(() => {
     plugins: [qwikCity(), qwikVite(), tsconfigPaths(), vanillaExtractPlugin()],
     preview: {
       headers: {
+        "Cache-Control": "public, max-age=600",
       },
     },
   };

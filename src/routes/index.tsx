@@ -2,7 +2,6 @@ import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
 import { login } from "masto";
-import { Toot } from "~/components/toot/toot";
 import { Toots } from "~/components/toots/toots";
 
 export const getPublicToots = loader$(async () => {

@@ -46,7 +46,9 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                 </span>
               </>
             )}
-            <span class="created">{timeAgo}</span>
+            <span class="created">
+              <a href={`/post/${props.toot.id}/`}>{timeAgo}</a>
+            </span>
           </div>
           {props.toot.reblog ? (
             <>
