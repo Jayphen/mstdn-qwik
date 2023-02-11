@@ -1,7 +1,8 @@
+import { component$ } from "@builder.io/qwik";
 import type { mastodon } from "masto";
 import { avatarImage, toot } from "./style.css";
 
-export function Toot(props: { toot: mastodon.v1.Status }) {
+export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
   const created = new Date(props.toot.createdAt);
 
   const diff = created - new Date();
@@ -76,4 +77,4 @@ export function Toot(props: { toot: mastodon.v1.Status }) {
       </article>
     </li>
   );
-}
+});
