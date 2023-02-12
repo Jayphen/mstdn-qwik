@@ -7,7 +7,7 @@ export const Toots = component$((props: { toots: mastodon.v1.Status[] }) => {
   return (
     <ul class={tootsStyle}>
       {props.toots.map((toot) => (
-        <Toot toot={toot} />
+        <Toot toot={toot} key={toot.id} />
       ))}
     </ul>
   );
