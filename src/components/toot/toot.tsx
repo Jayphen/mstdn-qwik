@@ -1,6 +1,14 @@
 import { component$ } from "@builder.io/qwik";
 import type { mastodon } from "masto";
-import { avatarImage, toot } from "./style.css";
+import {
+  avatarImage,
+  content,
+  createdAt,
+  meta,
+  name,
+  reblog,
+  toot,
+} from "./style.css";
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
   const created = new Date(props.toot.createdAt);
@@ -36,29 +44,29 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
           />
         </div>
         <div class="toot">
-          <div class="meta">
-            <span class="name">{props.toot.account.displayName}</span>
+          <div class={meta}>
+            <span class={name}>{props.toot.account.displayName}</span>
             {props.toot.reblog && (
               <>
                 retooted
-                <span class="name">
+                <span class={name}>
                   {props.toot.reblog?.account.displayName}
                 </span>
               </>
             )}
-            <span class="created">
+            <span class={createdAt}>
               <a href={`/post/${props.toot.id}/`}>{timeAgo}</a>
             </span>
           </div>
           {props.toot.reblog ? (
             <>
               <div
-                class="content reblog"
+                class={reblog}
                 dangerouslySetInnerHTML={props.toot.reblog?.content}
               />
             </>
           ) : (
-            <div class="content" dangerouslySetInnerHTML={props.toot.content} />
+            <div class={content} dangerouslySetInnerHTML={props.toot.content} />
           )}
           {props.toot.mediaAttachments.length && (
             <div class="attachments">
