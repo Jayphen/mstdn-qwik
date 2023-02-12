@@ -1,6 +1,8 @@
 import { component$ } from "@builder.io/qwik";
 import type { mastodon } from "masto";
 import {
+  attachments,
+  attachment as attachmentImage,
   avatarImage,
   content,
   createdAt,
@@ -8,6 +10,7 @@ import {
   name,
   reblog,
   toot,
+  username,
 } from "./style.css";
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
@@ -45,7 +48,10 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
         </div>
         <div class="toot">
           <div class={meta}>
-            <span class={name}>{props.toot.account.displayName}</span>
+            <div>
+              <span class={name}>{props.toot.account.displayName}</span>
+              <span class={username}>{props.toot.account.acct}</span>
+            </div>
             {props.toot.reblog && (
               <>
                 retooted
@@ -68,11 +74,12 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
           ) : (
             <div class={content} dangerouslySetInnerHTML={props.toot.content} />
           )}
-          {props.toot.mediaAttachments.length && (
-            <div class="attachments">
+          {props.toot.mediaAttachments.length ? (
+            <div class={attachments}>
               {props.toot.mediaAttachments.map((attachment) => (
                 <div>
                   <img
+                    class={attachmentImage}
                     src={attachment.previewUrl}
                     alt={attachment.description || undefined}
                     height={attachment.meta?.small?.height}
@@ -82,7 +89,7 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                 </div>
               ))}
             </div>
-          )}
+          ) : null}
         </div>
       </article>
     </li>

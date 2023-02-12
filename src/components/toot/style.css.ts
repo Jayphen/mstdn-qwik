@@ -44,10 +44,18 @@ globalStyle(`${content} .hashtag`, {
 
 export const meta = style({
   display: "flex",
+  gap: "0.5em",
+  alignItems: "center",
 });
 
 export const name = style({
   fontWeight: 700,
+});
+
+export const username = style({
+  fontWeight: 500,
+  display: "block",
+  fontSize: "0.875em",
 });
 
 export const createdAt = style({
@@ -57,10 +65,21 @@ export const createdAt = style({
 
 export const avatarImage = style({
   width: "100%",
+  borderRadius: "100%",
 
   "@media": {
     "(max-width: 550px)": {
       width: "3em",
     },
   },
+});
+
+export const attachments = style({
+  width: "100%",
+});
+
+export const attachment = style({
+  objectFit: "fill",
+  maxWidth: "100%",
+  height: "auto",
 });
