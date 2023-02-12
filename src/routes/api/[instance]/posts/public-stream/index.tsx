@@ -13,7 +13,7 @@ export const onGet: RequestHandler = async (ev) => {
 
   const writer = writableStream.getWriter();
 
-  const client = await login({ url: `https://front-end.social` });
+  const client = await login({ url: `https://${ev.params.instance}` });
 
   const stream = await client.v1.stream.streamPublicTimeline();
 

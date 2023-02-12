@@ -4,7 +4,7 @@ import { login } from "masto";
 export const onGet: RequestHandler = async (ev) => {
   const minId = ev.query.get("min");
 
-  const client = await login({ url: `https://front-end.social` });
+  const client = await login({ url: `https://${ev.params.instance}` });
 
   const posts = await client.v1.timelines.listPublic({ minId });
 

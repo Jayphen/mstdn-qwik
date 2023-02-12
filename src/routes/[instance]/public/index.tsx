@@ -5,6 +5,7 @@ import {
   useTask$,
 } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
+import { useLocation } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
 import { login } from "masto";
@@ -19,6 +20,7 @@ export const getPublicToots = loader$(async ({ params }) => {
 });
 
 export default component$(() => {
+  const loc = useLocation();
   const signal = getPublicToots.use();
   const unshownPosts = useSignal<mastodon.v1.Status[]>([]);
   const shownPosts = useSignal<mastodon.v1.Status[]>([]);
@@ -27,7 +29,9 @@ export default component$(() => {
 
   useClientEffect$(
     () => {
-      const source = new EventSource("/api/posts/public-stream");
+      const source = new EventSource(
+        `/api/${loc.params.instance}/posts/public-stream`
+      );
 
       function updateUnshown(message: MessageEvent<string>) {
         const parsed = JSON.parse(message.data);

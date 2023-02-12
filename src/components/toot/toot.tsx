@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik";
+import { useLocation } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
 import {
   attachments,
@@ -15,8 +16,9 @@ import {
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
   const created = new Date(props.toot.createdAt);
+  const loc = useLocation();
 
-  const diff = created - new Date();
+  const diff = +created - +new Date();
   const seconds = diff / 1000;
   const minutes = seconds / 60;
   const hours = minutes / 60;
@@ -61,7 +63,14 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
               </>
             )}
             <span class={createdAt}>
-              <a href={`/post/${props.toot.id}/`}>{timeAgo}</a>
+              {loc.pathname.includes("post") ? (
+                created.toLocaleString(undefined, {
+                  dateStyle: "medium",
+                  timeStyle: "short",
+                })
+              ) : (
+                <a href={`post/${props.toot.id}/`}>{timeAgo}</a>
+              )}
             </span>
           </div>
           {props.toot.reblog ? (

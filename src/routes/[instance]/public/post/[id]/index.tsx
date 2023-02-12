@@ -4,7 +4,7 @@ import { login } from "masto";
 import { Toots } from "~/components/toots/toots";
 
 export const getPost = loader$(async ({ params }) => {
-  const client = await login({ url: `https://front-end.social` });
+  const client = await login({ url: `https://${params.instance}` });
 
   return client.v1.statuses.fetch(params.id);
 });
