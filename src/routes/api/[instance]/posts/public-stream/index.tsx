@@ -20,10 +20,10 @@ export const onGet: RequestHandler = async (ev) => {
   const encoder = new TextEncoder();
 
   // we need an empty write to kick things off?
-  writer.write(encoder.encode(`data: ${JSON.stringify({ init: true })}\n\n`));
+  writer.write(encoder.encode(`data: \n\n`));
 
   stream.addListener("update", (e) => {
-    const data = `data: ${JSON.stringify(e)}\n\n`;
+    const data = `data: ${e.id}\n\n`;
     const encoded = encoder.encode(data);
     writer.write(encoded);
   });

@@ -4,28 +4,48 @@ import {
   useSignal,
   useTask$,
 } from "@builder.io/qwik";
-import type { DocumentHead } from "@builder.io/qwik-city";
+import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 import { useLocation } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
-import type { mastodon } from "masto";
 import { login } from "masto";
 import { Toots } from "~/components/toots/toots";
+import { isBrowser } from "@builder.io/qwik/build";
+
+export const onGet: RequestHandler = async (ev) => {
+  ev.headers.set(
+    "Cache-Control",
+    "private, stale-while-revalidate=120, max-age=1"
+  );
+};
 
 export const getPublicToots = loader$(async ({ params }) => {
   const client = await login({ url: `https://${params.instance}` });
 
-  //todo: set the max in a session cookie. Limit fetches to that max to avoid
-  // reflows when going fwd/back
   return client.v1.timelines.listPublic();
 });
 
 export default component$(() => {
   const loc = useLocation();
   const signal = getPublicToots.use();
-  const unshownPosts = useSignal<mastodon.v1.Status[]>([]);
-  const shownPosts = useSignal<mastodon.v1.Status[]>([]);
-  const shouldFetchMore = useSignal(false);
+  const unshownPosts = useSignal<string[]>([]);
   const toots = useSignal(signal.value);
+
+  useTask$(
+    () => {
+      if (isBrowser && localStorage.getItem("unshown")) {
+        const unshownFromStorage = JSON.parse(
+          localStorage.getItem("unshown") as string
+        );
+
+        if (+unshownFromStorage[0] < +toots.value[0].id) {
+          localStorage.setItem("unshown", "");
+        } else {
+          unshownPosts.value = unshownFromStorage;
+        }
+      }
+    },
+    { eagerness: "load" }
+  );
 
   useClientEffect$(
     () => {
@@ -34,11 +54,15 @@ export default component$(() => {
       );
 
       function updateUnshown(message: MessageEvent<string>) {
-        const parsed = JSON.parse(message.data);
-        const isNew = +parsed.id > +toots.value[0].id;
+        const isNew = +message.data > +toots.value[0].id;
+        console.log(unshownPosts.value);
 
-        if (!parsed.init && isNew) {
-          unshownPosts.value = [...unshownPosts.value, parsed];
+        if (isNew) {
+          unshownPosts.value = [...unshownPosts.value, message.data];
+          localStorage.setItem(
+            "unshown",
+            `${JSON.stringify(unshownPosts.value)}`
+          );
         }
       }
 
@@ -49,26 +73,15 @@ export default component$(() => {
     { eagerness: "idle" }
   );
 
-  useClientEffect$(async ({ track }) => {
-    track(() => shouldFetchMore.value);
-
-    if (shouldFetchMore.value) {
-      shouldFetchMore.value = false;
-
-      shownPosts.value = [...unshownPosts.value, ...shownPosts.value];
-      unshownPosts.value = [];
-    }
-  });
-
-  useTask$(({ track }) => {
-    track(() => shownPosts.value);
-    toots.value = [...shownPosts.value, ...signal.value];
-  });
-
   return (
     <>
       {unshownPosts.value.length > 0 && (
-        <button onClick$={() => (shouldFetchMore.value = true)}>
+        <button
+          onClick$={() => {
+            localStorage.setItem("unshown", "");
+            window.location.reload();
+          }}
+        >
           Load {unshownPosts.value.length} new posts
         </button>
       )}
