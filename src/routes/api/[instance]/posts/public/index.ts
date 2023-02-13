@@ -6,7 +6,7 @@ export const onGet: RequestHandler = async (ev) => {
 
   const client = await login({ url: `https://${ev.params.instance}` });
 
-  const posts = await client.v1.timelines.listPublic({ minId });
+  const posts = await client.v1.timelines.listPublic({ minId, limit: 40 });
 
   ev.json(200, posts);
 };

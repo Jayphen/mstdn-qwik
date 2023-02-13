@@ -1,0 +1,41 @@
+import { component$ } from "@builder.io/qwik";
+import { loader$ } from "@builder.io/qwik-city";
+import { login } from "masto";
+import { Toots } from "~/components/toots/toots";
+
+export const getPublicToots = loader$(async ({ params }) => {
+  const client = await login({ url: `https://${params.instance}` });
+
+  const toots = await client.v1.timelines.listPublic({
+    limit: 40,
+    maxId: params.maxId,
+  });
+  const next = await client.v1.timelines.listPublic({
+    limit: 40,
+    minId: toots[1].id,
+  });
+
+  return { toots, next };
+});
+
+export default component$(() => {
+  const {
+    value: { next, toots },
+  } = getPublicToots.use();
+
+  return (
+    <>
+      <Toots toots={toots} />
+
+      <a href={`../${toots[toots.length - 1].id}`}>Prev 40</a>
+
+      {next.length === 40 ? (
+        <a href={`../${next[0].id}`}>Next 40</a>
+      ) : next.length ? (
+        <a href={`../?min=${next[0].id}`}>Next page</a>
+      ) : (
+        <>You're all caught up!</>
+      )}
+    </>
+  );
+});

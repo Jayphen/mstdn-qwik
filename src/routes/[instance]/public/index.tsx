@@ -18,10 +18,16 @@ export const onGet: RequestHandler = async (ev) => {
   );
 };
 
-export const getPublicToots = loader$(async ({ params }) => {
+// what if we would have a chronological feed, where the oldest posts are at the top
+// with pagination. old posts disappear after you've read them. you could still paginate
+// back
+export const getPublicToots = loader$(async ({ params, query }) => {
   const client = await login({ url: `https://${params.instance}` });
 
-  return client.v1.timelines.listPublic();
+  return await client.v1.timelines.listPublic({
+    limit: 40,
+    minId: query.get("min"),
+  });
 });
 
 export default component$(() => {
@@ -78,16 +84,17 @@ export default component$(() => {
   return (
     <>
       {unshownPosts.value.length > 0 && (
-        <button
+        <a
+          href={loc.pathname}
           onClick$={() => {
             localStorage.setItem("unshown", "");
-            window.location.reload();
           }}
         >
           Load {unshownPosts.value.length} new posts
-        </button>
+        </a>
       )}
       <Toots toots={toots.value} />
+      <a href={`${toots.value[toots.value.length - 1].id}`}>Prev 40</a>
     </>
   );
 });
