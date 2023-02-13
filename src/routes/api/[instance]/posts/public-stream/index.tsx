@@ -23,7 +23,7 @@ export const onGet: RequestHandler = async (ev) => {
   writer.write(encoder.encode(`data: \n\n`));
 
   stream.addListener("update", (e) => {
-    const data = `data: ${e.id}\n\n`;
+    const data = `data: ${e.createdAt}\n\n`;
     const encoded = encoder.encode(data);
     writer.write(encoded);
   });

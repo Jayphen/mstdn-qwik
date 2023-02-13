@@ -37,7 +37,10 @@ export default component$(() => {
           localStorage.getItem("unshown") as string
         );
 
-        if (+unshownFromStorage[0] < +toots.value[0].id) {
+        if (
+          unshownFromStorage[unshownFromStorage.length - 1] <=
+          toots.value[0].createdAt
+        ) {
           localStorage.setItem("unshown", "");
         } else {
           unshownPosts.value = unshownFromStorage;
@@ -54,8 +57,7 @@ export default component$(() => {
       );
 
       function updateUnshown(message: MessageEvent<string>) {
-        const isNew = +message.data > +toots.value[0].id;
-        console.log(unshownPosts.value);
+        const isNew = message.data > toots.value[0].createdAt;
 
         if (isNew) {
           unshownPosts.value = [...unshownPosts.value, message.data];
