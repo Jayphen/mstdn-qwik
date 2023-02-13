@@ -69,7 +69,11 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                   timeStyle: "short",
                 })
               ) : (
-                <a href={`post/${props.toot.id}/`}>{timeAgo}</a>
+                <a
+                  href={`/${loc.params.instance}/public/post/${props.toot.id}/`}
+                >
+                  {timeAgo}
+                </a>
               )}
             </span>
           </div>
