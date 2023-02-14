@@ -40,6 +40,8 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
           : [Math.ceil(seconds), "seconds"])
       );
 
+  const [accountUsername, accountDomain] = props.toot.account.acct.split("@");
+
   return (
     <li>
       <article class={toot}>
@@ -54,7 +56,14 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
           <div class={meta}>
             <div>
               <span class={name}>{props.toot.account.displayName}</span>
-              <span class={username}>{props.toot.account.acct}</span>
+              <span class={username}>
+                {accountUsername}
+                {accountDomain && (
+                  <>
+                    @<a href={`/${accountDomain}/public`}>{accountDomain}</a>
+                  </>
+                )}
+              </span>
             </div>
             {props.toot.reblog && (
               <>
