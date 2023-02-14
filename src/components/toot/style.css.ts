@@ -15,7 +15,15 @@ export const toot = style({
   },
 });
 
-export const content = style({});
+export const tootContent = style({
+  display: "grid",
+  gap: "0.5em",
+});
+
+export const content = style({
+  display: "grid",
+  gap: "1em",
+});
 
 export const reblog = style([
   content,
@@ -40,6 +48,10 @@ globalStyle(`${content} .hashtag`, {
   fontSize: "0.75em",
   textDecoration: "none",
   opacity: "0.6",
+});
+
+globalStyle(`${content} p`, {
+  margin: 0,
 });
 
 export const meta = style({

@@ -12,6 +12,7 @@ import {
   reblog,
   toot,
   username,
+  tootContent,
 } from "./style.css";
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
@@ -48,7 +49,7 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
             alt=""
           />
         </div>
-        <div class="toot">
+        <div class={tootContent}>
           <div class={meta}>
             <div>
               <span class={name}>{props.toot.account.displayName}</span>
