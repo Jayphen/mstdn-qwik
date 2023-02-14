@@ -94,7 +94,12 @@ export default component$(() => {
         </a>
       )}
       <Toots toots={toots.value} />
-      <a href={`${toots.value[toots.value.length - 1].id}`}>Prev 40</a>
+      <a
+        href={`${toots.value[toots.value.length - 1].id}`}
+        style={{ padding: "0.25em", background: "white" }}
+      >
+        Prev page
+      </a>
     </>
   );
 });

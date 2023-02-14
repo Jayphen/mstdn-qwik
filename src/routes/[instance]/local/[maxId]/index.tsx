@@ -30,12 +30,27 @@ export default component$(() => {
     <>
       <Toots toots={toots} />
 
-      <a href={`../${toots[toots.length - 1].id}`}>Prev 40</a>
+      <a
+        href={`../${toots[toots.length - 1].id}`}
+        style={{ padding: "0.25em", background: "white" }}
+      >
+        Prev page
+      </a>
 
-      {next.length === 40 ? (
-        <a href={`../${next[0].id}`}>Next 40</a>
+      {next.length === 20 ? (
+        <a
+          href={`../${next[0].id}`}
+          style={{ padding: "0.25em", background: "white" }}
+        >
+          Next page
+        </a>
       ) : next.length ? (
-        <a href={`../?min=${next[0].id}`}>Next page</a>
+        <a
+          href={`../?min=${next[0].id}`}
+          style={{ padding: "0.25em", background: "white" }}
+        >
+          Next page
+        </a>
       ) : (
         <>You're all caught up!</>
       )}
