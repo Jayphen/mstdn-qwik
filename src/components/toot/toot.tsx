@@ -95,14 +95,19 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
             <div class={attachments}>
               {props.toot.mediaAttachments.map((attachment) => (
                 <div>
-                  <img
-                    class={attachmentImage}
-                    src={attachment.previewUrl}
-                    alt={attachment.description || undefined}
-                    height={attachment.meta?.small?.height}
-                    width={attachment.meta?.small?.width}
-                    loading="lazy"
-                  />
+                  <a
+                    href={attachment.remoteUrl || attachment.previewUrl}
+                    target="_blank"
+                  >
+                    <img
+                      class={attachmentImage}
+                      src={attachment.previewUrl}
+                      alt={attachment.description || undefined}
+                      height={attachment.meta?.small?.height}
+                      width={attachment.meta?.small?.width}
+                      loading="lazy"
+                    />
+                  </a>
                 </div>
               ))}
             </div>
