@@ -13,6 +13,7 @@ import {
   toot,
   username,
   tootContent,
+  tootLink,
 } from "./style.css";
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
@@ -72,8 +73,10 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
               ) : (
                 <a
                   href={`/${loc.params.instance}/public/post/${props.toot.id}/`}
+                  class={tootLink}
                 >
-                  {timeAgo}
+                  <span>{timeAgo}</span>
+                  <span>{props.toot.repliesCount} replies</span>
                 </a>
               )}
             </span>

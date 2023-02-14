@@ -75,6 +75,12 @@ export const createdAt = style({
   fontSize: "0.75em",
 });
 
+export const tootLink = style({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+});
+
 export const avatarImage = style({
   width: "100%",
   borderRadius: "100%",
