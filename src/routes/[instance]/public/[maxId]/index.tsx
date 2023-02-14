@@ -7,11 +7,11 @@ export const getPublicToots = loader$(async ({ params }) => {
   const client = await login({ url: `https://${params.instance}` });
 
   const toots = await client.v1.timelines.listPublic({
-    limit: 40,
+    limit: 20,
     maxId: params.maxId,
   });
   const next = await client.v1.timelines.listPublic({
-    limit: 40,
+    limit: 20,
     minId: toots[1].id,
   });
 

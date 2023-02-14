@@ -25,7 +25,7 @@ export const getPublicToots = loader$(async ({ params, query }) => {
   const client = await login({ url: `https://${params.instance}` });
 
   return await client.v1.timelines.listPublic({
-    limit: 40,
+    limit: 20,
     minId: query.get("min"),
   });
 });
