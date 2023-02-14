@@ -60,7 +60,9 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                 {accountUsername}
                 {accountDomain && (
                   <>
-                    @<a href={`/${accountDomain}/public`}>{accountDomain}</a>
+                    {/* not all domains allow browsing their feed */}
+                    {/* would need to look up and cache domains ahead of time */}
+                    @<a href={`/${accountDomain}/local`}>{accountDomain}</a>
                   </>
                 )}
               </span>
