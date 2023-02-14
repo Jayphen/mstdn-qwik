@@ -5,6 +5,12 @@ header {
   align-items: center;
 }
 
+@media (max-width: 550px) {
+  header {
+    flex-direction: column;
+  }
+}
+
 header span {
   display: inline-block;
   padding: 15px 10px;
