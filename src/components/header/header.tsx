@@ -8,9 +8,14 @@ export default component$(() => {
 
   return (
     <header>
+      <span>
+        You're viewing the {loc.params.instance}{" "}
+        {loc.pathname.includes("local") ? "local" : "public"} feed.
+      </span>
       <ul>
         <li>
           <a href={`/${loc.params.instance}/public`}>Public feed</a>
+          <a href={`/${loc.params.instance}/local`}>Local feed</a>
         </li>
       </ul>
     </header>

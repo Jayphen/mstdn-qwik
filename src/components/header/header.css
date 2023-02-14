@@ -2,6 +2,12 @@ header {
   display: flex;
   background: white;
   border-bottom: 2px solid var(--qwik-dark-purple);
+  align-items: center;
+}
+
+header span {
+  display: inline-block;
+  padding: 15px 10px;
 }
 
 header .logo a {
