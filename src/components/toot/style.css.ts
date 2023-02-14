@@ -47,7 +47,6 @@ globalStyle(`${content} span.ellipsis:after`, {
 globalStyle(`${content} .hashtag`, {
   fontSize: "0.75em",
   textDecoration: "none",
-  opacity: "0.6",
 });
 
 globalStyle(`${content} p`, {

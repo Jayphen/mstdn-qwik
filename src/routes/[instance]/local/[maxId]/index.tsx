@@ -1,4 +1,5 @@
 import { component$ } from "@builder.io/qwik";
+import type { DocumentHead } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
 import { login } from "masto";
 import { Toots } from "~/components/toots/toots";
@@ -41,3 +42,13 @@ export default component$(() => {
     </>
   );
 });
+
+export const head: DocumentHead = {
+  title: "Esky",
+  meta: [
+    {
+      name: "description",
+      content: "A mastodon client",
+    },
+  ],
+};

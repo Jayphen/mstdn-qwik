@@ -115,7 +115,7 @@ export const head: DocumentHead = {
   meta: [
     {
       name: "description",
-      content: "A mastadon client",
+      content: "A mastodon client",
     },
   ],
 };
