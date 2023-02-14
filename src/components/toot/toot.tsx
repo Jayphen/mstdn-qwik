@@ -113,7 +113,7 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                     <img
                       class={attachmentImage}
                       src={attachment.previewUrl}
-                      alt={attachment.description || undefined}
+                      alt={attachment.description || "Image attached toot"}
                       height={attachment.meta?.small?.height}
                       width={attachment.meta?.small?.width}
                       loading="lazy"
