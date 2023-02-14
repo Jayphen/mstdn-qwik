@@ -1,35 +1,16 @@
 import { component$, useStylesScoped$ } from "@builder.io/qwik";
+import { useLocation } from "@builder.io/qwik-city";
 import styles from "./header.css?inline";
 
 export default component$(() => {
   useStylesScoped$(styles);
+  const loc = useLocation();
 
   return (
     <header>
       <ul>
         <li>
-          <a
-            href="https://qwik.builder.io/docs/components/overview/"
-            target="_blank"
-          >
-            Docs
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://qwik.builder.io/examples/introduction/hello-world/"
-            target="_blank"
-          >
-            Examples
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://qwik.builder.io/tutorial/welcome/overview/"
-            target="_blank"
-          >
-            Tutorials
-          </a>
+          <a href={`/${loc.params.instance}/public`}>Public feed</a>
         </li>
       </ul>
     </header>
