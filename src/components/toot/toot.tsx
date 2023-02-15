@@ -55,7 +55,17 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
         <div class={tootContent}>
           <div class={meta}>
             <div>
-              <span class={name}>{props.toot.account.displayName}</span>
+              <span class={name}>
+                {loc.pathname.includes("person") ? (
+                  props.toot.account.displayName
+                ) : (
+                  <a
+                    href={`/${loc.params.instance}/person/${props.toot.account.id}/`}
+                  >
+                    {props.toot.account.displayName}
+                  </a>
+                )}
+              </span>
               <span class={username}>
                 {accountUsername}
                 {accountDomain && (
@@ -67,14 +77,6 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                 )}
               </span>
             </div>
-            {props.toot.reblog && (
-              <>
-                retooted
-                <span class={name}>
-                  {props.toot.reblog?.account.displayName}
-                </span>
-              </>
-            )}
             <span class={createdAt}>
               {loc.pathname.includes("post") ? (
                 created.toLocaleString(undefined, {
@@ -94,6 +96,16 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
           </div>
           {props.toot.reblog ? (
             <>
+              <>
+                <span class={name}>
+                  retooted{" "}
+                  <a
+                    href={`/${loc.params.instance}/person/${props.toot.reblog.account.id}/`}
+                  >
+                    {props.toot.reblog?.account.displayName}
+                  </a>
+                </span>
+              </>
               <div
                 class={reblog}
                 dangerouslySetInnerHTML={props.toot.reblog?.content}

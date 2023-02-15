@@ -29,6 +29,8 @@ export const reblog = style([
   content,
   {
     fontSize: "0.85em",
+    padding: "0.5em",
+    border: "1px solid #eaeaea",
   },
 ]);
 
