@@ -14,8 +14,18 @@ export default component$(() => {
       </span>
       <ul>
         <li>
-          <a href={`/${loc.params.instance}/public`}>Public feed</a>
-          <a href={`/${loc.params.instance}/local`}>Local feed</a>
+          <a
+            href={`/${loc.params.instance}/public`}
+            title={`Posts from ${loc.params.instance}, and all the other instances it knows about`}
+          >
+            Federated feed
+          </a>
+          <a
+            href={`/${loc.params.instance}/local`}
+            title={`Posts only from ${loc.params.instance}`}
+          >
+            Local feed
+          </a>
         </li>
       </ul>
     </header>
