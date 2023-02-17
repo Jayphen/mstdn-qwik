@@ -1,5 +1,5 @@
 import { component$ } from "@builder.io/qwik";
-import type { CookieOptions, RequestHandler } from "@builder.io/qwik-city";
+import type { CookieOptions } from "@builder.io/qwik-city";
 import { action$, Form, z, zod$ } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
 import { login } from "masto";

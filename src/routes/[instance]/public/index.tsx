@@ -1,6 +1,6 @@
 import {
   component$,
-  useClientEffect$,
+  useBrowserVisibleTask$,
   useSignal,
   useTask$,
 } from "@builder.io/qwik";
@@ -63,7 +63,7 @@ export default component$(() => {
     { eagerness: "load" }
   );
 
-  useClientEffect$(
+  useBrowserVisibleTask$(
     () => {
       const source = new EventSource(
         `/api/${loc.params.instance}/posts/public-stream`
@@ -85,7 +85,7 @@ export default component$(() => {
 
       () => source.removeEventListener("message", updateUnshown);
     },
-    { eagerness: "idle" }
+    { strategy: "document-idle" }
   );
 
   return (

@@ -1,6 +1,6 @@
 import {
   component$,
-  useClientEffect$,
+  useBrowserVisibleTask$,
   useSignal,
   useTask$,
 } from "@builder.io/qwik";
@@ -44,7 +44,7 @@ export const getPublicToots = loader$(async ({ params, query, cookie }) => {
 
 export default component$(() => {
   const loc = useLocation();
-  const signal = getPublicToots.use();
+  const signal = getPublicToots();
   const unshownPosts = useSignal<string[]>([]);
   const toots = useSignal(typeof signal.value === "object" && signal.value);
 
@@ -68,7 +68,7 @@ export default component$(() => {
     { eagerness: "load" }
   );
 
-  useClientEffect$(
+  useBrowserVisibleTask$(
     () => {
       const source = new EventSource(
         `/api/${loc.params.instance}/posts/local-stream`
@@ -90,7 +90,7 @@ export default component$(() => {
 
       () => source.removeEventListener("message", updateUnshown);
     },
-    { eagerness: "idle" }
+    { strategy: "document-idle" }
   );
 
   return (
