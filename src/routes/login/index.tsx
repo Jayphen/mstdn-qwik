@@ -21,7 +21,12 @@ export const useLogin = action$(
 
     if (appStore.has(server)) {
       app = appStore.get(server)!;
-      cookie.set("server", JSON.stringify(app), cookieConfig);
+      cookie.set(
+        "server",
+        encodeURIComponent(JSON.stringify(app)),
+        cookieConfig
+      );
+      console.log({ cachedServer: server });
     } else {
       try {
         masto = await login({ url: `https://${server}` });
@@ -33,15 +38,20 @@ export const useLogin = action$(
       }
 
       try {
+        console.log({ server });
         app = await masto.v1.apps.create({
           clientName: "esky-dev",
-          redirectUris: "http://localhost:5173/api/oauth",
+          redirectUris: `http://localhost:5173/api/${server}/oauth`,
           scopes: "read write follow",
         });
 
         appStore.set(server, app);
 
-        cookie.set("server", JSON.stringify(app), cookieConfig);
+        cookie.set(
+          "server",
+          encodeURIComponent(JSON.stringify(app)),
+          cookieConfig
+        );
       } catch (_error) {
         return fail(400, {
           message:
@@ -50,11 +60,16 @@ export const useLogin = action$(
       }
     }
 
+    console.log({ id: app.clientId, secret: app.clientSecret });
+
     // Get redirect
     const url = new URL(`https://${server}/oauth/authorize`);
     url.searchParams.set("client_id", app.clientId || "");
     url.searchParams.set("scope", "read write follow");
-    url.searchParams.set("redirect_uri", `http://localhost:5173/api/oauth`);
+    url.searchParams.set(
+      "redirect_uri",
+      `http://localhost:5173/api/${server}/oauth`
+    );
     url.searchParams.set("response_type", "code");
 
     redirect(302, url.toString());
@@ -66,12 +81,6 @@ export const useLogin = action$(
     })),
   })
 );
-
-export const onGet: RequestHandler = async ({ cookie, redirect }) => {
-  if (cookie.get("server")) {
-    redirect(302, "https://google.com");
-  }
-};
 
 export default component$(() => {
   const action = useLogin();
