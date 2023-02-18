@@ -19,7 +19,7 @@ export const onGet: RequestHandler = async (ev) => {
 
   body.set("client_id", app.clientId!);
   body.set("client_secret", app.clientSecret!);
-  body.set("redirect_uri", `http://localhost:5173/api/${instance}/oauth`);
+  body.set("redirect_uri", `${process.env.VITE_WEBSITE}/api/${instance}/oauth`);
   body.set("grant_type", "authorization_code");
   body.set("code", code);
   body.set("scope", "read write follow");

@@ -26,7 +26,6 @@ export const useLogin = action$(
         encodeURIComponent(JSON.stringify(app)),
         cookieConfig
       );
-      console.log({ cachedServer: server });
     } else {
       try {
         masto = await login({ url: `https://${server}` });
@@ -38,10 +37,9 @@ export const useLogin = action$(
       }
 
       try {
-        console.log({ server });
         app = await masto.v1.apps.create({
           clientName: "esky-dev",
-          redirectUris: `http://localhost:5173/api/${server}/oauth`,
+          redirectUris: `${process.env.VITE_WEBSITE}/api/${server}/oauth`,
           scopes: "read write follow",
         });
 
@@ -60,15 +58,13 @@ export const useLogin = action$(
       }
     }
 
-    console.log({ id: app.clientId, secret: app.clientSecret });
-
     // Get redirect
     const url = new URL(`https://${server}/oauth/authorize`);
     url.searchParams.set("client_id", app.clientId || "");
     url.searchParams.set("scope", "read write follow");
     url.searchParams.set(
       "redirect_uri",
-      `http://localhost:5173/api/${server}/oauth`
+      `${process.env.VITE_WEBSITE}/api/${server}/oauth`
     );
     url.searchParams.set("response_type", "code");
 
