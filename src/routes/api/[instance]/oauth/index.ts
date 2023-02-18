@@ -1,15 +1,14 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
-import type { mastodon } from "masto";
+import { appStore } from "~/routes/login";
 
 export const onGet: RequestHandler = async (ev) => {
-  const appCookie = ev.cookie.get("server")?.value;
   const instance = ev.params.instance;
+  const app = appStore.get(instance);
 
-  if (!appCookie) {
+  if (!app) {
     throw ev.redirect(302, "/login/");
   }
 
-  const app: mastodon.v1.Client = JSON.parse(decodeURIComponent(appCookie!));
   const url = ev.url;
   const code = url.searchParams.get("code");
 

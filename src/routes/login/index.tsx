@@ -1,34 +1,32 @@
 import { component$ } from "@builder.io/qwik";
-import type { CookieOptions } from "@builder.io/qwik-city";
 import { action$, Form, z, zod$ } from "@builder.io/qwik-city";
-import type { mastodon } from "masto";
-import { login } from "masto";
+import type { CreateClientParams, mastodon } from "masto";
+import { createClient } from "masto";
+import { fetchV1Instance } from "masto";
 import isFQDN from "validator/lib/isFQDN";
 import { error, form } from "./style.css";
 
-export const appStore: Map<string, mastodon.v1.Client> = new Map();
+export const appStore: Map<string, CreateClientParams & mastodon.v1.Client> =
+  new Map();
 
 export const useLogin = action$(
-  async ({ server }, { fail, cookie, redirect }) => {
-    let masto: mastodon.Client;
-    let app: mastodon.v1.Client;
-    const cookieConfig: CookieOptions = {
-      httpOnly: true,
-      path: "/",
-      secure: true,
-      sameSite: "lax",
-    };
+  async ({ server }, { fail, redirect }) => {
+    let client: mastodon.Client;
+    let oauthClient: mastodon.v1.Client;
+    let clientConfig: CreateClientParams;
 
     if (appStore.has(server)) {
-      app = appStore.get(server)!;
-      cookie.set(
-        "server",
-        encodeURIComponent(JSON.stringify(app)),
-        cookieConfig
-      );
+      client = createClient(appStore.get(server)!);
     } else {
       try {
-        masto = await login({ url: `https://${server}` });
+        const instance = await fetchV1Instance({ url: `https://${server}` });
+        clientConfig = {
+          url: `https://${instance.uri}`,
+          streamingApiUrl: instance.urls.streamingApi,
+          version: instance.version,
+        };
+
+        client = createClient(clientConfig);
       } catch (_error) {
         return fail(400, {
           message:
@@ -37,19 +35,12 @@ export const useLogin = action$(
       }
 
       try {
-        app = await masto.v1.apps.create({
+        oauthClient = await client.v1.apps.create({
           clientName: "esky-dev",
           redirectUris: `${process.env.VITE_WEBSITE}/api/${server}/oauth`,
           scopes: "read write follow",
         });
-
-        appStore.set(server, app);
-
-        cookie.set(
-          "server",
-          encodeURIComponent(JSON.stringify(app)),
-          cookieConfig
-        );
+        appStore.set(server, { ...clientConfig, ...oauthClient });
       } catch (_error) {
         return fail(400, {
           message:
@@ -60,7 +51,7 @@ export const useLogin = action$(
 
     // Get redirect
     const url = new URL(`https://${server}/oauth/authorize`);
-    url.searchParams.set("client_id", app.clientId || "");
+    url.searchParams.set("client_id", appStore.get(server)?.clientId || "");
     url.searchParams.set("scope", "read write follow");
     url.searchParams.set(
       "redirect_uri",
