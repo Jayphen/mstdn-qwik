@@ -9,8 +9,14 @@ export const serverTimeLoader = loader$(() => {
   };
 });
 
+export const useLoggedIn = loader$(async (ev) => {
+  const token = ev.cookie.get("token")?.value;
+
+  return token ? true : false;
+});
+
 export default component$(() => {
-  const serverTime = serverTimeLoader.use();
+  const serverTime = serverTimeLoader();
   return (
     <>
       <main>
