@@ -46,6 +46,8 @@
     "vite-tsconfig-paths": "3.5.0"
   },
   "dependencies": {
+    "cookie-parser": "^1.4.6",
+    "dotenv": "^16.0.3",
     "masto": "^5.9.1",
     "validator": "^13.9.0"
   }
