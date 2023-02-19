@@ -23,6 +23,7 @@ export const tootContent = style({
 export const content = style({
   display: "grid",
   gap: "1em",
+  wordBreak: "break-word",
 });
 
 export const reblog = style([
