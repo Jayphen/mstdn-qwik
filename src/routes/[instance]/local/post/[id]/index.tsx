@@ -1,6 +1,7 @@
 import { component$ } from "@builder.io/qwik";
 import { loader$ } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
+import { Reply } from "~/components/reply/reply";
 import { Toots } from "~/components/toots/toots";
 import { createClient } from "~/lib/mastodon";
 
@@ -20,6 +21,7 @@ export default component$(() => {
   return (
     <div style={{ display: "grid", gap: "0.5em" }}>
       <Toots toots={[signal.value.toot]} />
+      <Reply />
       {signal.value.toot.repliesCount > 0 && (
         <div style={{ fontSize: "0.875em", marginLeft: "1em" }}>
           <h2>Replies</h2>
