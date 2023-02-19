@@ -1,12 +1,19 @@
+import type { Cookie } from "@builder.io/qwik-city";
+import type { CreateClientParams } from "masto";
 import { createClient as createMastoClient } from "masto";
-import { appStore } from "~/routes/login";
+import { storage } from "./storage";
 
-export async function createClient(opts: { instance: string, token?: string }) {
-  const params = appStore.get(opts.instance)
+export async function createClient(cookie: Cookie, paramsInstance: string) {
+  const token = cookie.get("token")?.value;
+  const instance = cookie.get("instance")?.value || paramsInstance;
 
-  if (!params) {
-    throw new Error("Instance is not registered")
-  }
+  const params = ((await storage.getItem(
+    `servers:v0:${instance}`
+  )) as CreateClientParams) || { url: `https://${paramsInstance}` };
 
-  return createMastoClient({ ...params, accessToken: opts.token })
+  return createMastoClient({ ...params, accessToken: token });
+}
+
+export async function createPublicClient(instance: string) {
+  return createMastoClient({ url: `https://${instance}` });
 }

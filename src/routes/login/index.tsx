@@ -4,10 +4,8 @@ import type { CreateClientParams, mastodon } from "masto";
 import { createClient } from "masto";
 import { fetchV1Instance } from "masto";
 import isFQDN from "validator/lib/isFQDN";
+import { storage } from "~/lib/storage";
 import { error, form } from "./style.css";
-
-export const appStore: Map<string, CreateClientParams & mastodon.v1.Client> =
-  new Map();
 
 export const useLogin = action$(
   async ({ server }, { fail, redirect }) => {
@@ -15,8 +13,12 @@ export const useLogin = action$(
     let oauthClient: mastodon.v1.Client;
     let clientConfig: CreateClientParams;
 
-    if (appStore.has(server)) {
-      client = createClient(appStore.get(server)!);
+    if (await storage.hasItem(`servers:v0:${server}`)) {
+      console.log("has item?");
+      const item = (await storage.getItem(
+        `servers:v0:${server}`
+      )) as CreateClientParams & mastodon.v1.Client;
+      client = createClient(item);
     } else {
       try {
         const instance = await fetchV1Instance({ url: `https://${server}` });
@@ -40,7 +42,11 @@ export const useLogin = action$(
           redirectUris: `${process.env.VITE_WEBSITE}/api/${server}/oauth`,
           scopes: "read write follow",
         });
-        appStore.set(server, { ...clientConfig, ...oauthClient });
+        storage.setItem(`servers:v0:${server}`, {
+          ...clientConfig,
+          ...oauthClient,
+        });
+        console.log("set");
       } catch (_error) {
         return fail(400, {
           message:
@@ -51,7 +57,11 @@ export const useLogin = action$(
 
     // Get redirect
     const url = new URL(`https://${server}/oauth/authorize`);
-    url.searchParams.set("client_id", appStore.get(server)?.clientId || "");
+    url.searchParams.set(
+      "client_id",
+      ((await storage.getItem(`servers:v0:${server}`)) as mastodon.v1.Client)
+        ?.clientId || ""
+    );
     url.searchParams.set("scope", "read write follow");
     url.searchParams.set(
       "redirect_uri",

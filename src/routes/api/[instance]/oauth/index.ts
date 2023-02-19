@@ -1,9 +1,12 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
-import { appStore } from "~/routes/login";
+import type { mastodon } from "masto";
+import { storage } from "~/lib/storage";
 
 export const onGet: RequestHandler = async (ev) => {
   const instance = ev.params.instance;
-  const app = appStore.get(instance);
+  const app = (await storage.getItem(
+    `servers:v0:${instance}`
+  )) as mastodon.v1.Client;
 
   if (!app) {
     throw ev.redirect(302, "/login/");
@@ -36,6 +39,13 @@ export const onGet: RequestHandler = async (ev) => {
   const token = await resp.json();
 
   ev.cookie.set("token", token.access_token, {
+    path: "/",
+    secure: true,
+    httpOnly: true,
+    sameSite: "lax",
+  });
+
+  ev.cookie.set("instance", instance, {
     path: "/",
     secure: true,
     httpOnly: true,
