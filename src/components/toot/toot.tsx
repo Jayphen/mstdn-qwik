@@ -60,7 +60,7 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
                   props.toot.account.displayName
                 ) : (
                   <a
-                    href={`/${loc.params.instance}/person/${props.toot.account.id}/`}
+                    href={`/${loc.params.instance}/person/${accountUsername}/${props.toot.account.id}/`}
                   >
                     {props.toot.account.displayName}
                   </a>
