@@ -7,9 +7,9 @@ import {
 import type { DocumentHead, RequestHandler } from "@builder.io/qwik-city";
 import { useLocation } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
-import { createClient, login } from "masto";
 import { Toots } from "~/components/toots/toots";
 import { isBrowser } from "@builder.io/qwik/build";
+import { createClient, createPublicClient } from "~/lib/mastodon";
 
 export const onGet: RequestHandler = async (ev) => {
   ev.headers.set(
@@ -22,26 +22,26 @@ export const onGet: RequestHandler = async (ev) => {
 // with pagination. old posts disappear after you've read them. you could still paginate
 // back
 export const getPublicToots = loader$(async ({ params, query, cookie }) => {
-  const token = cookie.get("token")?.value;
+  const client =
+    params.instance === cookie.get("instance")?.value
+      ? await createClient(cookie, params.instance)
+      : await createPublicClient(params.instance);
 
-  const client = token
-    ? createClient({
-      url: `https://${params.instance}`,
-      accessToken: token,
-    })
-    : await login({ url: `https://${params.instance}` });
-
-  return await client.v1.timelines.listPublic({
-    limit: 20,
-    minId: query.get("min"),
-  });
+  try {
+    return await client.v1.timelines.listPublic({
+      limit: 20,
+      minId: query.get("min"),
+    });
+  } catch (e: any) {
+    return e.message;
+  }
 });
 
 export default component$(() => {
   const loc = useLocation();
-  const signal = getPublicToots.use();
+  const signal = getPublicToots();
   const unshownPosts = useSignal<string[]>([]);
-  const toots = useSignal(signal.value);
+  const toots = useSignal(typeof signal.value === "object" && signal.value);
 
   useTask$(
     () => {
@@ -90,23 +90,29 @@ export default component$(() => {
 
   return (
     <>
-      {unshownPosts.value.length > 0 && (
-        <a
-          href={loc.pathname}
-          onClick$={() => {
-            localStorage.setItem("unshown", "");
-          }}
-        >
-          Load {unshownPosts.value.length} new posts
-        </a>
+      {toots.value.length ? (
+        <>
+          {unshownPosts.value.length > 0 && (
+            <a
+              href={loc.pathname}
+              onClick$={() => {
+                localStorage.setItem("unshown", "");
+              }}
+            >
+              Load {unshownPosts.value.length} new posts
+            </a>
+          )}
+          <Toots toots={toots.value} />
+          <a
+            href={`${toots.value[toots.value.length - 1].id}`}
+            style={{ padding: "0.25em", background: "white" }}
+          >
+            Prev page
+          </a>
+        </>
+      ) : (
+        <>"oh no"</>
       )}
-      <Toots toots={toots.value} />
-      <a
-        href={`${toots.value[toots.value.length - 1].id}`}
-        style={{ padding: "0.25em", background: "white" }}
-      >
-        Prev page
-      </a>
     </>
   );
 });

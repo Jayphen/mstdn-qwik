@@ -1,11 +1,11 @@
 import { component$ } from "@builder.io/qwik";
 import type { DocumentHead } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
-import { login } from "masto";
 import { Toots } from "~/components/toots/toots";
+import { createClient } from "~/lib/mastodon";
 
-export const getPublicToots = loader$(async ({ params }) => {
-  const client = await login({ url: `https://${params.instance}` });
+export const getPublicToots = loader$(async ({ params, cookie }) => {
+  const client = await createClient(cookie, params.instance);
 
   const toots = await client.v1.timelines.listPublic({
     limit: 20,

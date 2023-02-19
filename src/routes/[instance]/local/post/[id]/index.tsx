@@ -1,11 +1,11 @@
 import { component$ } from "@builder.io/qwik";
 import { loader$ } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
-import { login } from "masto";
 import { Toots } from "~/components/toots/toots";
+import { createClient } from "~/lib/mastodon";
 
-export const getPost = loader$(async ({ params }) => {
-  const client = await login({ url: `https://${params.instance}` });
+export const useGetPost = loader$(async ({ params, cookie }) => {
+  const client = await createClient(cookie, params.instance);
 
   const toot = await client.v1.statuses.fetch(params.id);
   const replies = (await client.v1.statuses.fetchContext(params.id))
@@ -15,7 +15,7 @@ export const getPost = loader$(async ({ params }) => {
 });
 
 export default component$(() => {
-  const signal = getPost.use();
+  const signal = useGetPost();
 
   return (
     <div style={{ display: "grid", gap: "0.5em" }}>

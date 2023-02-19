@@ -1,9 +1,8 @@
 import { component$ } from "@builder.io/qwik";
 import { action$, Form, z, zod$ } from "@builder.io/qwik-city";
-import type { CreateClientParams, mastodon } from "masto";
-import { createClient } from "masto";
-import { fetchV1Instance } from "masto";
+import type { mastodon } from "masto";
 import isFQDN from "validator/lib/isFQDN";
+import { createPublicClient } from "~/lib/mastodon";
 import { storage } from "~/lib/storage";
 import { error, form } from "./style.css";
 
@@ -11,24 +10,14 @@ export const useLogin = action$(
   async ({ server }, { fail, redirect }) => {
     let client: mastodon.Client;
     let oauthClient: mastodon.v1.Client;
-    let clientConfig: CreateClientParams;
 
     if (await storage.hasItem(`servers:v0:${server}`)) {
-      console.log("has item?");
-      const item = (await storage.getItem(
-        `servers:v0:${server}`
-      )) as CreateClientParams & mastodon.v1.Client;
-      client = createClient(item);
+      oauthClient = (await storage.getItem(
+        `servers:v0:${server}.json`
+      )) as mastodon.v1.Client;
     } else {
       try {
-        const instance = await fetchV1Instance({ url: `https://${server}` });
-        clientConfig = {
-          url: `https://${instance.uri}`,
-          streamingApiUrl: instance.urls.streamingApi,
-          version: instance.version,
-        };
-
-        client = createClient(clientConfig);
+        client = await createPublicClient(server);
       } catch (_error) {
         return fail(400, {
           message:
@@ -42,11 +31,7 @@ export const useLogin = action$(
           redirectUris: `${process.env.VITE_WEBSITE}/api/${server}/oauth`,
           scopes: "read write follow",
         });
-        storage.setItem(`servers:v0:${server}`, {
-          ...clientConfig,
-          ...oauthClient,
-        });
-        console.log("set");
+        storage.setItem(`servers:v0:${server}.json`, oauthClient);
       } catch (_error) {
         return fail(400, {
           message:
@@ -57,11 +42,7 @@ export const useLogin = action$(
 
     // Get redirect
     const url = new URL(`https://${server}/oauth/authorize`);
-    url.searchParams.set(
-      "client_id",
-      ((await storage.getItem(`servers:v0:${server}`)) as mastodon.v1.Client)
-        ?.clientId || ""
-    );
+    url.searchParams.set("client_id", oauthClient.clientId || "");
     url.searchParams.set("scope", "read write follow");
     url.searchParams.set(
       "redirect_uri",

@@ -7,8 +7,6 @@ export const onGet: RequestHandler = async (ev) => {
   ev.headers.set("Content-Type", "text/event-stream");
   ev.headers.set("Cache-Control", "no-cache, no-transform");
 
-  ev.status(200);
-
   const writableStream = ev.getWritableStream();
 
   const writer = writableStream.getWriter();

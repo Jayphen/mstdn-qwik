@@ -5,7 +5,7 @@ import { storage } from "~/lib/storage";
 export const onGet: RequestHandler = async (ev) => {
   const instance = ev.params.instance;
   const app = (await storage.getItem(
-    `servers:v0:${instance}`
+    `servers:v0:${instance}.json`
   )) as mastodon.v1.Client;
 
   if (!app) {
