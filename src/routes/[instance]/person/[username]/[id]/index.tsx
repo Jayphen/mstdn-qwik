@@ -1,4 +1,4 @@
-import { component$ } from "@builder.io/qwik";
+import { component$, Resource } from "@builder.io/qwik";
 import { loader$ } from "@builder.io/qwik-city";
 import { Toots } from "~/components/toots/toots";
 import { createClient, createPublicClient } from "~/lib/mastodon";
@@ -17,8 +17,6 @@ export const useGetPublicDetail = loader$(async ({ params }) => {
       excludeReplies: true,
     });
 
-    console.log("remoteid", params.id);
-
     return { detail, toots };
   } catch (e) {
     console.error(e);
@@ -31,23 +29,21 @@ export const useGetPublicDetail = loader$(async ({ params }) => {
 // need to go via our own private client, and that will require us to look up
 // the user's ID via the username
 // TODO: defer this
-export const useGetPrivateDetail = loader$(async ({ params, cookie }) => {
-  if (!cookie.get("token")?.value) {
-    return { relationship: null };
+export const useGetPrivateDetail = loader$(
+  async ({ params, cookie, defer }) => {
+    if (!cookie.get("token")?.value) {
+      return defer(Promise.resolve([]));
+    }
+
+    const c = await createClient(cookie, params.instance);
+
+    const detail = await c.v1.accounts.lookup({
+      acct: `${params.username}@${params.instance}`,
+    });
+
+    return defer(c.v1.accounts.fetchRelationships([detail.id]));
   }
-
-  const c = await createClient(cookie, params.instance);
-
-  const detail = await c.v1.accounts.lookup({
-    acct: `${params.username}@${params.instance}`,
-  });
-
-  console.log("localid", detail.id);
-
-  const relationship = await c.v1.accounts.fetchRelationships([detail.id]);
-
-  return { relationship };
-});
+);
 
 export default component$(() => {
   const { detail, toots } = useGetPublicDetail().value;
@@ -81,18 +77,27 @@ export default component$(() => {
 
 export const Follow = component$(() => {
   const loggedIn = useLoggedIn();
-  const { relationship } = useGetPrivateDetail().value;
-
-  const followed = relationship?.[0].following;
+  const signal = useGetPrivateDetail();
 
   return (
     <>
       {loggedIn.value ? (
-        followed ? (
-          <button>unfollow</button>
-        ) : (
-          <button>follow</button>
-        )
+        <Resource
+          value={signal}
+          onResolved={(detail) => {
+            const following = detail[0].following;
+
+            return (
+              <>
+                {following ? (
+                  <button>unfollow</button>
+                ) : (
+                  <button>follow</button>
+                )}
+              </>
+            );
+          }}
+        />
       ) : null}
     </>
   );
