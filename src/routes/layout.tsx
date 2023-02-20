@@ -1,5 +1,6 @@
 import { component$, Slot } from "@builder.io/qwik";
 import { loader$ } from "@builder.io/qwik-city";
+import { createClient } from "~/lib/mastodon";
 
 import Header from "../components/header/header";
 
@@ -15,8 +16,21 @@ export const useLoggedIn = loader$(async (ev) => {
   return token ? true : false;
 });
 
+export const useUserDetail = loader$(async (ev) => {
+  if (!ev.cookie.has("token")) {
+    return undefined;
+  }
+
+  const client = await createClient(ev.cookie, ev.params.instance);
+
+  const user = await client.v1.accounts.verifyCredentials();
+
+  return user;
+});
+
 export default component$(() => {
   const serverTime = serverTimeLoader();
+
   return (
     <>
       <main>

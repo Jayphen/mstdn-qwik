@@ -10,12 +10,18 @@ export default component$(() => {
 
   return (
     <>
-      {user.value && <div class="loggedIn">Logged in at {user.value.url}</div>}
+      {user.value ? (
+        <div class="loggedIn">Logged in at {user.value.url}</div>
+      ) : (
+        <a href="/login">Login</a>
+      )}
       <header>
-        <span>
-          You're viewing the {loc.params.instance}{" "}
-          {loc.pathname.includes("local") ? "local" : "public"} feed.
-        </span>
+        {loc.params.instance && (
+          <span>
+            You're viewing the {loc.params.instance}{" "}
+            {loc.pathname.includes("local") ? "local" : "public"} feed.
+          </span>
+        )}
         <ul>
           <li>
             <a
