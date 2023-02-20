@@ -8,7 +8,7 @@ export const useCreateReply = action$(
     const client = await createClient(ev.cookie, ev.params.instance);
 
     const result = await client.v1.statuses.create({
-      inReplyToId: ev.params.id,
+      inReplyToId: form.tootId || ev.params.id,
       status: form.post,
     });
 
@@ -16,10 +16,11 @@ export const useCreateReply = action$(
   },
   zod$({
     post: z.string().min(1),
+    tootId: z.string(),
   })
 );
 
-export const Reply = component$(() => {
+export const Reply = component$((props: { tootId: string }) => {
   const loggedin = useLoggedIn();
   const action = useCreateReply();
   const formRef = useSignal<HTMLFormElement>();
@@ -35,6 +36,7 @@ export const Reply = component$(() => {
           >
             <h3>Leave a reply</h3>
             <textarea name="post" disabled={action.isRunning} />
+            <input type="hidden" name="tootId" value={props.tootId} />
             <button type="submit" disabled={action.isRunning}>
               Reply
             </button>

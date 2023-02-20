@@ -1,26 +1,77 @@
 import { component$ } from "@builder.io/qwik";
-import { loader$ } from "@builder.io/qwik-city";
+import { loader$, useLocation } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
-import { login } from "masto";
+import { Reply } from "~/components/reply/reply";
 import { Toots } from "~/components/toots/toots";
+import { createClient, createPublicClient } from "~/lib/mastodon";
+import { useLoggedIn } from "~/routes/layout";
 
-export const getPost = loader$(async ({ params }) => {
-  const client = await login({ url: `https://${params.instance}` });
+export const getPost = loader$(async ({ params, cookie, query }) => {
+  const client = await createPublicClient(params.instance);
+
+  const isRemote = params.instance !== cookie.get("instance")?.value;
+  const token = cookie.get("token")?.value;
+
+  const isInteractingRemotely =
+    token && isRemote && query.get("interactRemotely");
+  const couldInteractRemotely =
+    token && isRemote && !query.get("interactRemotely");
+  const isInteractingLocally =
+    token && params.instance === cookie.get("instance")?.value;
 
   const toot = await client.v1.statuses.fetch(params.id);
   const replies = (await client.v1.statuses.fetchContext(params.id))
     .descendants;
 
-  return { toot, replies };
+  let tootViaLocalContext: mastodon.v1.Status | undefined;
+
+  if (!isInteractingRemotely) {
+    tootViaLocalContext = undefined;
+  } else {
+    const client = await createClient(cookie, params.instance);
+
+    const url = toot.reblog?.url || toot.url;
+    const searchResult = await client.v2.search({
+      q: encodeURI(url!),
+      resolve: true,
+      limit: 1,
+    });
+
+    const status = searchResult.statuses[0];
+
+    tootViaLocalContext = status;
+  }
+
+  return {
+    toot,
+    replies,
+    tootViaLocalContext,
+    isInteractingRemotely,
+    couldInteractRemotely,
+    isInteractingLocally,
+  };
 });
 
 export default component$(() => {
-  const signal = getPost.use();
+  const signal = getPost();
+  const loc = useLocation();
+
+  const toot = signal.value.tootViaLocalContext || signal.value.toot;
+  const isInteracting =
+    signal.value.isInteractingRemotely || signal.value.isInteractingLocally;
 
   return (
     <div style={{ display: "grid", gap: "0.5em" }}>
-      <Toots toots={[signal.value.toot]} />
-      {signal.value.toot.repliesCount > 0 && (
+      <Toots toots={[toot]} />
+      {isInteracting && <Reply tootId={toot.id} />}
+      {signal.value.couldInteractRemotely && (
+        <a href="?interactRemotely=true">
+          Would you like to comment on this remote post? Since it's not part of
+          your home server, it will take a moment to connect you to{" "}
+          {loc.params.instance}
+        </a>
+      )}
+      {toot.repliesCount > 0 && (
         <div style={{ fontSize: "0.875em", marginLeft: "1em" }}>
           <h2>Replies</h2>
           <Replies replies={signal.value.replies} />
