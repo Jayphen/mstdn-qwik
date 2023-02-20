@@ -11,6 +11,14 @@ header {
   }
 }
 
+.loggedIn {
+  display: block;
+  font-size: 0.875em;
+  margin: 0 auto;
+  padding: 0.5em;
+  text-align: center;
+}
+
 header span {
   display: inline-block;
   padding: 15px 10px;
