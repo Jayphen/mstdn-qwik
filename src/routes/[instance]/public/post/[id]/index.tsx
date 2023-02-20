@@ -4,7 +4,6 @@ import type { mastodon } from "masto";
 import { Reply } from "~/components/reply/reply";
 import { Toots } from "~/components/toots/toots";
 import { createClient, createPublicClient } from "~/lib/mastodon";
-import { useLoggedIn } from "~/routes/layout";
 
 export const getPost = loader$(async ({ params, cookie, query }) => {
   const client = await createPublicClient(params.instance);

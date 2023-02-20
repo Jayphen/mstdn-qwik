@@ -21,7 +21,7 @@ export default component$(() => {
   return (
     <div style={{ display: "grid", gap: "0.5em" }}>
       <Toots toots={[signal.value.toot]} />
-      <Reply />
+      <Reply tootId={signal.value.toot.id} />
       {signal.value.toot.repliesCount > 0 && (
         <div style={{ fontSize: "0.875em", marginLeft: "1em" }}>
           <h2>Replies</h2>
