@@ -8,36 +8,51 @@ export default component$(() => {
   const user = useUserDetail();
   const loc = useLocation();
 
+  const userHost = user.value ? new URL(user.value.url).hostname : null;
+
   return (
     <>
       {user.value ? (
-        <div class="loggedIn">Logged in at {user.value.url}</div>
+        <div class="loggedIn">
+          Logged in as @{user.value.acct}@{userHost}
+        </div>
       ) : (
         <a href="/login">Login</a>
       )}
       <header>
         {loc.params.instance && (
-          <span>
-            You're viewing the {loc.params.instance}{" "}
-            {loc.pathname.includes("local") ? "local" : "public"} feed.
-          </span>
+          <>
+            {loc.url.pathname.includes("home") ? (
+              <span>You're viewing your home feed</span>
+            ) : (
+              <span>
+                You're viewing the {loc.params.instance}{" "}
+                {loc.pathname.includes("local") ? "local" : "public"} feed.
+              </span>
+            )}
+            <ul>
+              {user.value && (
+                <li>
+                  <a href={`/${userHost}/home`}> Home</a>
+                </li>
+              )}
+              <li>
+                <a
+                  href={`/${loc.params.instance}/public`}
+                  title={`Posts from ${loc.params.instance}, and all the other instances it knows about`}
+                >
+                  Federated feed
+                </a>
+                <a
+                  href={`/${loc.params.instance}/local`}
+                  title={`Posts only from ${loc.params.instance}`}
+                >
+                  Local feed
+                </a>
+              </li>
+            </ul>
+          </>
         )}
-        <ul>
-          <li>
-            <a
-              href={`/${loc.params.instance}/public`}
-              title={`Posts from ${loc.params.instance}, and all the other instances it knows about`}
-            >
-              Federated feed
-            </a>
-            <a
-              href={`/${loc.params.instance}/local`}
-              title={`Posts only from ${loc.params.instance}`}
-            >
-              Local feed
-            </a>
-          </li>
-        </ul>
       </header>
     </>
   );
