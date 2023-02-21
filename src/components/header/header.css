@@ -12,11 +12,12 @@ header {
 }
 
 .loggedIn {
-  display: block;
+  display: flex;
   font-size: 0.875em;
   margin: 0 auto;
   padding: 0.5em;
   text-align: center;
+  gap: 0.5em;
 }
 
 header span {
