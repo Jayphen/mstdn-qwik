@@ -16,8 +16,6 @@ export async function createClient(cookie: Cookie, paramsInstance: string) {
 
   const decryptedToken = await decryptToken(token);
 
-  console.log(decryptedToken);
-
   const params =
     ((await storage.getItem(
       `servers:v0:${instance}.json`
