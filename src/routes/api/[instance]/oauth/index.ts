@@ -42,7 +42,7 @@ export const onGet: RequestHandler = async (ev) => {
   const encryptedToken = await encryptToken(token.access_token);
 
   const expires = new Date();
-  expires.setMonth(expires.getMonth() + 1);
+  expires.setMonth(expires.getMonth() + 12);
 
   ev.cookie.set("token", encryptedToken, {
     path: "/",
