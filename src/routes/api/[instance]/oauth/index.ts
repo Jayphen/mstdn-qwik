@@ -1,5 +1,6 @@
 import type { RequestHandler } from "@builder.io/qwik-city";
 import type { mastodon } from "masto";
+import { encryptToken } from "~/lib/crypto";
 import { storage } from "~/lib/storage";
 
 export const onGet: RequestHandler = async (ev) => {
@@ -38,11 +39,17 @@ export const onGet: RequestHandler = async (ev) => {
 
   const token = await resp.json();
 
-  ev.cookie.set("token", token.access_token, {
+  const encryptedToken = await encryptToken(token.access_token);
+
+  const expires = new Date();
+  expires.setMonth(expires.getMonth() + 1);
+
+  ev.cookie.set("token", encryptedToken, {
     path: "/",
     secure: true,
     httpOnly: true,
     sameSite: "lax",
+    expires,
   });
 
   ev.cookie.set("instance", instance, {
@@ -50,6 +57,7 @@ export const onGet: RequestHandler = async (ev) => {
     secure: true,
     httpOnly: true,
     sameSite: "lax",
+    expires,
   });
 
   throw ev.redirect(302, `/${instance}/local/`);

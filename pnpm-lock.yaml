@@ -18,6 +18,7 @@ specifiers:
   eslint: 8.33.0
   eslint-plugin-qwik: 0.17.5
   express: 4.17.3
+  jose: ^4.12.0
   masto: ^5.9.1
   node-fetch: 3.3.0
   prettier: 2.8.3
@@ -32,6 +33,7 @@ specifiers:
 dependencies:
   cookie-parser: 1.4.6
   dotenv: 16.0.3
+  jose: 4.12.0
   masto: 5.9.1
   unstorage: 1.1.5
   validator: 13.9.0
@@ -2288,6 +2290,10 @@ packages:
   /javascript-stringify/2.1.0:
     resolution: {integrity: sha512-JVAfqNPTvNq3sB/VHQJAFxN/sPgKnsKrCwyRt15zwNCdrMMJDdcEOdubuy+DuJYYdm0ox1J4uzEuYKkN+9yhVg==}
     dev: true
+
+  /jose/4.12.0:
+    resolution: {integrity: sha512-wW1u3cK81b+SFcHjGC8zw87yuyUweEFe0UJirrXEw1NasW00eF7sZjeG3SLBGz001ozxQ46Y9sofDvhBmWFtXQ==}
+    dev: false
 
   /js-sdsl/4.3.0:
     resolution: {integrity: sha512-mifzlm2+5nZ+lEcLJMoBK0/IH/bDg8XnJfd/Wq6IP+xoCjLZsTOnV2QpxlVbX9bMnkl5PdEjNtBJ9Cj1NjifhQ==}

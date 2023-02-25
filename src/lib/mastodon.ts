@@ -2,6 +2,7 @@ import type { Cookie } from "@builder.io/qwik-city";
 import type { CreateClientParams, mastodon } from "masto";
 import { fetchV1Instance } from "masto";
 import { createClient as createMastoClient } from "masto";
+import { decryptToken } from "./crypto";
 import { storage } from "./storage";
 
 export async function createClient(cookie: Cookie, paramsInstance: string) {
@@ -9,12 +10,20 @@ export async function createClient(cookie: Cookie, paramsInstance: string) {
   const instance = cookie.get("instance")?.value || paramsInstance;
   const url = `https://${instance}`;
 
+  if (!token) {
+    throw new Error("Invalid token");
+  }
+
+  const decryptedToken = await decryptToken(token);
+
+  console.log(decryptedToken);
+
   const params =
     ((await storage.getItem(
       `servers:v0:${instance}.json`
     )) as CreateClientParams) || {};
 
-  return createMastoClient({ ...params, url, accessToken: token });
+  return createMastoClient({ ...params, url, accessToken: decryptedToken });
 }
 
 export async function createPublicClient(domain: string) {
