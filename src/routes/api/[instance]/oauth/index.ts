@@ -39,20 +39,17 @@ export const onGet: RequestHandler = async (ev) => {
 
   const token = await resp.json();
 
-  const encryptedToken = await encryptToken(token.access_token);
+  const jwt = JSON.stringify({
+    token: token.access_token,
+    instance,
+  });
+
+  const encryptedToken = await encryptToken(jwt);
 
   const expires = new Date();
   expires.setMonth(expires.getMonth() + 12);
 
   ev.cookie.set("token", encryptedToken, {
-    path: "/",
-    secure: true,
-    httpOnly: true,
-    sameSite: "lax",
-    expires,
-  });
-
-  ev.cookie.set("instance", instance, {
     path: "/",
     secure: true,
     httpOnly: true,

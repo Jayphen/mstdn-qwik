@@ -6,22 +6,23 @@ import { decryptToken } from "./crypto";
 import { storage } from "./storage";
 
 export async function createClient(cookie: Cookie, paramsInstance: string) {
-  const token = cookie.get("token")?.value;
-  const instance = cookie.get("instance")?.value || paramsInstance;
-  const url = `https://${instance}`;
+  const jwe = cookie.get("token")?.value;
 
-  if (!token) {
+  if (!jwe) {
     throw new Error("Invalid token");
   }
 
-  const decryptedToken = await decryptToken(token);
+  const jwt = JSON.parse(await decryptToken(jwe));
+
+  const instance = jwt.instance || paramsInstance;
+  const url = `https://${instance}`;
 
   const params =
     ((await storage.getItem(
       `servers:v0:${instance}.json`
     )) as CreateClientParams) || {};
 
-  return createMastoClient({ ...params, url, accessToken: decryptedToken });
+  return createMastoClient({ ...params, url, accessToken: jwt.token });
 }
 
 export async function createPublicClient(domain: string) {
