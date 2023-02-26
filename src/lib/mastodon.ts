@@ -12,17 +12,21 @@ export async function createClient(cookie: Cookie, paramsInstance: string) {
     throw new Error("Invalid token");
   }
 
-  const jwt = JSON.parse(await decryptToken(jwe));
+  try {
+    const jwt = JSON.parse(await decryptToken(jwe));
 
-  const instance = jwt.instance || paramsInstance;
-  const url = `https://${instance}`;
+    const instance = jwt.instance || paramsInstance;
+    const url = `https://${instance}`;
 
-  const params =
-    ((await storage.getItem(
-      `servers:v0:${instance}.json`
-    )) as CreateClientParams) || {};
+    const params =
+      ((await storage.getItem(
+        `servers:v0:${instance}.json`
+      )) as CreateClientParams) || {};
 
-  return createMastoClient({ ...params, url, accessToken: jwt.token });
+    return createMastoClient({ ...params, url, accessToken: jwt.token });
+  } catch (e) {
+    throw new Error("token_invalid");
+  }
 }
 
 export async function createPublicClient(domain: string) {

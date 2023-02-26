@@ -21,11 +21,15 @@ export const useUserDetail = loader$(async (ev) => {
     return undefined;
   }
 
-  const client = await createClient(ev.cookie, ev.params.instance);
+  try {
+    const client = await createClient(ev.cookie, ev.params.instance);
 
-  const user = await client.v1.accounts.verifyCredentials();
+    const user = await client.v1.accounts.verifyCredentials();
 
-  return user;
+    return user;
+  } catch (e) {
+    return undefined;
+  }
 });
 
 export default component$(() => {
