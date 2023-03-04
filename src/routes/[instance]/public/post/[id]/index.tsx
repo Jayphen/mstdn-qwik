@@ -5,9 +5,11 @@ import { Reply } from "~/components/reply/reply";
 import { Toots } from "~/components/toots/toots";
 import { createClient, createPublicClient } from "~/lib/mastodon";
 
-export const getPost = loader$(async ({ params, cookie, query }) => {
+export const getPost = loader$(async (context) => {
+  const { params, cookie, query } = context;
   const client = await createPublicClient(params.instance);
 
+  // todo: fix this logic
   const isRemote = params.instance !== cookie.get("instance")?.value;
   const token = cookie.get("token")?.value;
 
@@ -27,7 +29,7 @@ export const getPost = loader$(async ({ params, cookie, query }) => {
   if (!isInteractingRemotely) {
     tootViaLocalContext = undefined;
   } else {
-    const client = await createClient(cookie, params.instance);
+    const client = await createClient(context);
 
     const url = toot.reblog?.url || toot.url;
     const searchResult = await client.v2.search({

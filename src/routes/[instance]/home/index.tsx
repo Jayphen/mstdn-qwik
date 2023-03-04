@@ -16,7 +16,7 @@ export const getHomeFeed = loader$(async (ev) => {
     throw ev.redirect(301, "/login");
   }
 
-  const client = await createClient(ev.cookie, ev.params.instance);
+  const client = await createClient(ev);
 
   try {
     return await client.v1.timelines.listHome({ limit: 20 });

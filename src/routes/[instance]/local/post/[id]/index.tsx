@@ -5,8 +5,9 @@ import { Reply } from "~/components/reply/reply";
 import { Toots } from "~/components/toots/toots";
 import { createClient } from "~/lib/mastodon";
 
-export const useGetPost = loader$(async ({ params, cookie }) => {
-  const client = await createClient(cookie, params.instance);
+export const useGetPost = loader$(async (context) => {
+  const client = await createClient(context);
+  const { params } = context;
 
   const toot = await client.v1.statuses.fetch(params.id);
   const replies = (await client.v1.statuses.fetchContext(params.id))

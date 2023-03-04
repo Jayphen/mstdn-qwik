@@ -5,7 +5,7 @@ import { useLoggedIn } from "~/routes/layout";
 
 export const useCreateReply = action$(
   async (form, ev) => {
-    const client = await createClient(ev.cookie, ev.params.instance);
+    const client = await createClient(ev);
 
     const result = await client.v1.statuses.create({
       inReplyToId: form.tootId || ev.params.id,

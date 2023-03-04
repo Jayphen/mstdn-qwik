@@ -4,13 +4,7 @@ import { Toots } from "~/components/toots/toots";
 import { createClient } from "~/lib/mastodon";
 
 export const useGetBookmarks = loader$(async function(ev) {
-  const instance = ev.cookie.get("instance")?.value;
-
-  if (!instance) {
-    throw ev.html(500, "bugger");
-  }
-
-  const client = await createClient(ev.cookie, instance);
+  const client = await createClient(ev);
 
   return client.v1.bookmarks.list();
 });

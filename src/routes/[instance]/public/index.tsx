@@ -9,7 +9,7 @@ import { useLocation } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
 import { Toots } from "~/components/toots/toots";
 import { isBrowser } from "@builder.io/qwik/build";
-import { createClient, createPublicClient } from "~/lib/mastodon";
+import { createClient } from "~/lib/mastodon";
 
 export const onGet: RequestHandler = async (ev) => {
   ev.headers.set(
@@ -21,16 +21,13 @@ export const onGet: RequestHandler = async (ev) => {
 // what if we would have a chronological feed, where the oldest posts are at the top
 // with pagination. old posts disappear after you've read them. you could still paginate
 // back
-export const getPublicToots = loader$(async ({ params, query, cookie }) => {
-  const client =
-    params.instance === cookie.get("instance")?.value
-      ? await createClient(cookie, params.instance)
-      : await createPublicClient(params.instance);
+export const getPublicToots = loader$(async (context) => {
+  const client = await createClient(context);
 
   try {
     return await client.v1.timelines.listPublic({
       limit: 20,
-      minId: query.get("min"),
+      minId: context.query.get("min"),
     });
   } catch (e: any) {
     return e.message;

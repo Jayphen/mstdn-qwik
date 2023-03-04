@@ -4,7 +4,7 @@ import { createClient } from "~/lib/mastodon";
 export const onGet: RequestHandler = async (ev) => {
   if (ev.cookie.get("token")?.value) {
     try {
-      const client = await createClient(ev.cookie, ev.params.instance);
+      const client = await createClient(ev);
 
       const user = await client.v1.accounts.verifyCredentials();
 

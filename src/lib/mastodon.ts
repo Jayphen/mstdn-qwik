@@ -1,11 +1,31 @@
-import type { Cookie } from "@builder.io/qwik-city";
+import type {
+  Cookie,
+  RequestEvent,
+  RequestEventAction,
+  RequestEventLoader,
+} from "@builder.io/qwik-city";
 import type { CreateClientParams, mastodon } from "masto";
 import { fetchV1Instance } from "masto";
 import { createClient as createMastoClient } from "masto";
 import { decryptToken } from "./crypto";
 import { storage } from "./storage";
 
-export async function createClient(cookie: Cookie, paramsInstance: string) {
+export async function createClient(
+  context: RequestEvent | RequestEventLoader | RequestEventAction
+) {
+  const jwe = context.cookie.get("token")?.value;
+
+  if (!jwe) {
+    return createPublicClient(context.params.instance);
+  }
+
+  return createPrivateClient(context.cookie, context.params.instance);
+}
+
+export async function createPrivateClient(
+  cookie: Cookie,
+  paramsInstance: string
+) {
   const jwe = cookie.get("token")?.value;
 
   if (!jwe) {

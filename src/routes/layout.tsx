@@ -22,7 +22,7 @@ export const useUserDetail = loader$(async (ev) => {
   }
 
   try {
-    const client = await createClient(ev.cookie, ev.params.instance);
+    const client = await createClient(ev);
 
     const user = await client.v1.accounts.verifyCredentials();
 

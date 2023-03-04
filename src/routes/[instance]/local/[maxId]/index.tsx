@@ -4,12 +4,12 @@ import { loader$ } from "@builder.io/qwik-city";
 import { Toots } from "~/components/toots/toots";
 import { createClient } from "~/lib/mastodon";
 
-export const getPublicToots = loader$(async ({ params, cookie }) => {
-  const client = await createClient(cookie, params.instance);
+export const getPublicToots = loader$(async (context) => {
+  const client = await createClient(context);
 
   const toots = await client.v1.timelines.listPublic({
     limit: 20,
-    maxId: params.maxId,
+    maxId: context.params.maxId,
     local: true,
   });
   const next = await client.v1.timelines.listPublic({
@@ -24,7 +24,7 @@ export const getPublicToots = loader$(async ({ params, cookie }) => {
 export default component$(() => {
   const {
     value: { next, toots },
-  } = getPublicToots.use();
+  } = getPublicToots();
 
   return (
     <>
