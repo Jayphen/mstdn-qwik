@@ -25,7 +25,7 @@ specifiers:
   styled-vanilla-extract: ^0.5.4
   typescript: 4.9.5
   undici: 5.18.0
-  unstorage: ^1.2.0
+  unstorage: ^1.4.0
   validator: ^13.9.0
   vite: 4.1.1
   vite-tsconfig-paths: 3.5.0
@@ -35,7 +35,7 @@ dependencies:
   dotenv: 16.0.3
   jose: 4.13.1
   masto: 5.10.0
-  unstorage: 1.2.0
+  unstorage: 1.4.0
   validator: 13.9.0
 
 devDependencies:
@@ -313,9 +313,9 @@ packages:
       '@azure/core-tracing': 1.0.1
       '@azure/core-util': 1.2.0
       '@azure/logger': 1.0.4
-      '@azure/msal-browser': 2.33.0
+      '@azure/msal-browser': 2.34.0
       '@azure/msal-common': 9.1.1
-      '@azure/msal-node': 1.15.0
+      '@azure/msal-node': 1.16.0
       events: 3.3.0
       jws: 4.0.0
       open: 8.4.2
@@ -356,16 +356,16 @@ packages:
     dev: false
     optional: true
 
-  /@azure/msal-browser/2.33.0:
-    resolution: {integrity: sha512-c7CVh1tfUfxiWkEIhoIb11hL4PGo4hz0M+gMy34ATagAKdLK7qyEu/5AXJWAf5lz5eE+vQhm7+LKiuETrcXXGw==}
+  /@azure/msal-browser/2.34.0:
+    resolution: {integrity: sha512-stoXdlfAtyVIMOp1lS5PorgO5f66MGRi3Q1FBlXhVZFTsTfAWrNdSOx1m/PXWHskWE9aXO+NEzXVOoWmDNnvNA==}
     engines: {node: '>=0.8.0'}
     dependencies:
-      '@azure/msal-common': 10.0.0
+      '@azure/msal-common': 11.0.0
     dev: false
     optional: true
 
-  /@azure/msal-common/10.0.0:
-    resolution: {integrity: sha512-/LghpT93jsZLy55QzTsRZWMx6R1Mjc1Aktwps8sKSGE3WbrGwbSsh2uhDlpl6FMcKChYjJ0ochThWwwOodrQNg==}
+  /@azure/msal-common/11.0.0:
+    resolution: {integrity: sha512-SZH8ObQ3Hq5v3ogVGBYJp1nNW7p+MtM4PH4wfNadBP9wf7K0beQHF9iOtRcjPOkwZf+ZD49oXqw91LndIkdk8g==}
     engines: {node: '>=0.8.0'}
     dev: false
     optional: true
@@ -376,11 +376,11 @@ packages:
     dev: false
     optional: true
 
-  /@azure/msal-node/1.15.0:
-    resolution: {integrity: sha512-fwC5M0c8pxOAzmScPbpx7j28YVTDebUaizlVF7bR0xvlU0r3VWW5OobCcr9ybqKS6wGyO7u4EhXJS9rjRWAuwA==}
+  /@azure/msal-node/1.16.0:
+    resolution: {integrity: sha512-eGXPp65i++mAIvziafbCH970TCeECB6iaQP7aRzZEjtU238cW4zKm40U8YxkiCn9rR1G2VeMHENB5h6WRk7ZCQ==}
     engines: {node: 10 || 12 || 14 || 16 || 18}
     dependencies:
-      '@azure/msal-common': 10.0.0
+      '@azure/msal-common': 11.0.0
       jsonwebtoken: 9.0.0
       uuid: 8.3.2
     dev: false
@@ -631,7 +631,7 @@ packages:
       '@types/mdx': 2.0.3
       source-map: 0.7.4
       vfile: 5.3.7
-      zod: 3.21.0
+      zod: 3.21.4
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -994,8 +994,8 @@ packages:
     dev: false
     optional: true
 
-  /@planetscale/database/1.5.0:
-    resolution: {integrity: sha512-Qwh7Or1W5dB5mZ9EQqDkgvkDKhBBmQe58KIVUy0SGocNtr5fP4JAWtvZ6EdLAV6C6hVpzNlCA2xIg9lKTswm1Q==}
+  /@planetscale/database/1.6.0:
+    resolution: {integrity: sha512-eb02567S706Xme/nVwx+EN/wyoHhHBXl1a7+67R/Xm91myEpLn0vZNl58TvLZztBxje4gga16lc8dLt0elNrJA==}
     engines: {node: '>=16'}
     requiresBuild: true
     dev: false
@@ -1297,8 +1297,8 @@ packages:
       outdent: 0.8.0
     dev: true
 
-  /@vanilla-extract/integration/6.1.1:
-    resolution: {integrity: sha512-JGlynmtCju+NWU5ITgs81szCo8A4hFfW1E2oAsn++JHvgU7+wyg9N0TwByZOB1/nbrHVKISzRvl1M0BeB0mZXQ==}
+  /@vanilla-extract/integration/6.1.2:
+    resolution: {integrity: sha512-80Qff+mry4aUC3O2xv6N+FzylI9L64ZZ5THXUKFueZNTTswqgnxLlT9Nsf1nQYtvaZjavorVt3qpq+aakBZHvg==}
     dependencies:
       '@babel/core': 7.21.0
       '@babel/plugin-syntax-typescript': 7.20.0_@babel+core@7.21.0
@@ -1476,8 +1476,8 @@ packages:
     engines: {node: ^6 || ^7 || ^8 || ^9 || ^10 || ^11 || ^12 || >=13.7}
     hasBin: true
     dependencies:
-      caniuse-lite: 1.0.30001460
-      electron-to-chromium: 1.4.320
+      caniuse-lite: 1.0.30001462
+      electron-to-chromium: 1.4.325
       node-releases: 2.0.10
       update-browserslist-db: 1.0.10_browserslist@4.21.5
     dev: true
@@ -1523,8 +1523,8 @@ packages:
       tslib: 2.5.0
     dev: false
 
-  /caniuse-lite/1.0.30001460:
-    resolution: {integrity: sha512-Bud7abqjvEjipUkpLs4D7gR0l8hBYBHoa+tGtKJHvT2AYzLp1z7EmVkUT4ERpVUfca8S2HGIVs883D8pUH1ZzQ==}
+  /caniuse-lite/1.0.30001462:
+    resolution: {integrity: sha512-PDd20WuOBPiasZ7KbFnmQRyuLE7cFXW2PVd7dmALzbkUXEP46upAuCDm9eY9vho8fgNMGmbAX92QBZHzcnWIqw==}
     dev: true
 
   /capital-case/1.0.4:
@@ -1881,8 +1881,8 @@ packages:
     resolution: {integrity: sha1-WQxhFWsK4vTwJVcyoViyZrxWsh0=}
     dev: true
 
-  /electron-to-chromium/1.4.320:
-    resolution: {integrity: sha512-h70iRscrNluMZPVICXYl5SSB+rBKo22XfuIS1ER0OQxQZpKTnFpuS6coj7wY9M/3trv7OR88rRMOlKmRvDty7Q==}
+  /electron-to-chromium/1.4.325:
+    resolution: {integrity: sha512-K1C03NT4I7BuzsRdCU5RWkgZxtswnKDYM6/eMhkEXqKu4e5T+ck610x3FPzu1y7HVFSiQKZqP16gnJzPpji1TQ==}
     dev: true
 
   /encodeurl/1.0.2:
@@ -2874,8 +2874,8 @@ packages:
     dependencies:
       yallist: 4.0.0
 
-  /lru-cache/7.18.2:
-    resolution: {integrity: sha512-KytVYmZ3reaw/f3d7GCISvWWjTYxszNdvD5rDvm/zECga3eSWzryRY7iauJsjo6aaw03lHYTSNTk7lW83Bv+zQ==}
+  /lru-cache/7.18.3:
+    resolution: {integrity: sha512-jumlc0BIUrS3qJGgIkWZsyfAM7NCWiBcCDhnd+3NNM5KbBmLTgHVfWBcg6W+rLUsIpzpERPsvwUP7CckAQSOoA==}
     engines: {node: '>=12'}
     dev: false
 
@@ -2891,7 +2891,7 @@ packages:
       change-case: 4.1.2
       eventemitter3: 5.0.0
       isomorphic-ws: 5.0.0_ws@8.12.1
-      qs: 6.11.0
+      qs: 6.11.1
       semver: 7.3.8
       ws: 8.12.1
     transitivePeerDependencies:
@@ -3701,8 +3701,8 @@ packages:
     resolution: {integrity: sha512-rRV+zQD8tVFys26lAGR9WUuS4iUAngJScM+ZRSKtvl5tKeZ2t5bvdNFdNHBW9FWR4guGHlgmsZ1G7BSm2wTbuA==}
     engines: {node: '>=6'}
 
-  /qs/6.11.0:
-    resolution: {integrity: sha512-MvjoMCJwEarSbUYk5O+nmoSzSutSsTwF85zcHPQ9OrlFoZOYIjaqBAJIqIXjptyD5vThxGq52Xu/MaJzRkIk4Q==}
+  /qs/6.11.1:
+    resolution: {integrity: sha512-0wsrzgTz/kAVIeuxSjnpGC56rzYtr6JT/2BwEvMaPhFIoYa1aGO8LbzuU1R0uUYQkLpWBTOj0l/CLAJB64J6nQ==}
     engines: {node: '>=0.6'}
     dependencies:
       side-channel: 1.0.4
@@ -4067,7 +4067,7 @@ packages:
     dependencies:
       '@builder.io/qwik': 0.18.1_undici@5.18.0
       '@vanilla-extract/css': 1.9.5
-      '@vanilla-extract/integration': 6.1.1
+      '@vanilla-extract/integration': 6.1.2
       outdent: 0.8.0
       vite: 4.1.1_@types+node@18.14.6
     transitivePeerDependencies:
@@ -4317,8 +4317,8 @@ packages:
     engines: {node: '>= 0.8'}
     dev: true
 
-  /unstorage/1.2.0:
-    resolution: {integrity: sha512-QRCcetx19ug1QiYkWk7M5SyrQkjMy2NKY1LsbzdQhSEhIp7Td+tUkAJc64XeCHhzqiHDZ/69S0xseQs6gByESA==}
+  /unstorage/1.4.0:
+    resolution: {integrity: sha512-l4ggmklguKsfkoEcO9QiSgnYLEUTVqHk+Sl9Y63FzhUnCqGz7icxLX7WmvDwPtAYH6qI4hBkfJbVVjS5rispMQ==}
     dependencies:
       anymatch: 3.1.3
       chokidar: 3.5.3
@@ -4326,7 +4326,7 @@ packages:
       h3: 1.5.0
       ioredis: 5.3.1
       listhen: 1.0.3
-      lru-cache: 7.18.2
+      lru-cache: 7.18.3
       mri: 1.2.0
       node-fetch-native: 1.0.2
       ofetch: 1.0.1
@@ -4338,7 +4338,7 @@ packages:
       '@azure/identity': 3.1.3
       '@azure/keyvault-secrets': 4.6.0
       '@azure/storage-blob': 12.13.0
-      '@planetscale/database': 1.5.0
+      '@planetscale/database': 1.6.0
     transitivePeerDependencies:
       - encoding
       - supports-color
@@ -4556,8 +4556,8 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /zod/3.21.0:
-    resolution: {integrity: sha512-UYdykTcVxB6lfdyLzAqLyyYAlOcpoluECvjsdoaqfQmz9p+3LRaIqYcNiL/J2kFYp66fBM8wwBvIGVEjq7KtZw==}
+  /zod/3.21.4:
+    resolution: {integrity: sha512-m46AKbrzKVzOzs/DZgVnG5H55N1sv1M8qZU3A8RIKbs3mrACDNeIOeilDymVb2HdmP8uwshOCF4uJ8uM9rCqJw==}
     dev: true
 
   /zwitch/2.0.4:
