@@ -1,9 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { component$, Resource } from "@builder.io/qwik";
+import { component$ } from "@builder.io/qwik";
 import { loader$ } from "@builder.io/qwik-city";
 import { Toots } from "~/components/toots/toots";
-import { createClient, createPublicClient } from "~/lib/mastodon";
-import { useLoggedIn } from "~/routes/layout";
+import { createClient } from "~/lib/mastodon";
 import { meta } from "./index.css";
 
 // let's just fetch using the authed client.
@@ -12,12 +11,8 @@ import { meta } from "./index.css";
 //
 
 export const useGetPerson = loader$(async function useGetPerson(ev) {
-  const token = ev.cookie.get("token")?.value;
-
   try {
-    const client = token
-      ? await createClient(ev.cookie, ev.params.instance)
-      : await createPublicClient(ev.params.instance);
+    const client = await createClient(ev);
 
     const detail = await client.v1.accounts.fetch(ev.params.id);
     const toots = await client.v1.accounts.listStatuses(ev.params.id, {
