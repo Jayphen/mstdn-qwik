@@ -9,7 +9,7 @@ import { useLocation } from "@builder.io/qwik-city";
 import { loader$ } from "@builder.io/qwik-city";
 import { Toots } from "~/components/toots/toots";
 import { isBrowser } from "@builder.io/qwik/build";
-import { createClient, createPublicClient } from "~/lib/mastodon";
+import { createClient } from "~/lib/mastodon";
 
 export const onGet: RequestHandler = async (ev) => {
   ev.headers.set(
