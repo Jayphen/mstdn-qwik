@@ -1,11 +1,18 @@
 import { globalStyle, style } from "@vanilla-extract/css";
 
+export const tootwrapper = style({
+  display: "flex",
+  flexDirection: "column",
+  gap: "0.5em",
+});
+
 export const toot = style({
   display: "grid",
   gridTemplateColumns: "3em 1fr",
   gap: "1em",
   padding: "0.75em",
   background: "white",
+  borderRadius: "8px",
 
   "@media": {
     "(max-width: 550px)": {
@@ -102,4 +109,27 @@ export const attachment = style({
   objectFit: "fill",
   maxWidth: "100%",
   height: "auto",
+});
+
+export const tootbar = style({
+  background: "white",
+  borderRadius: "8px",
+  display: "flex",
+  padding: "0.5em",
+  opacity: 0.5,
+  position: "relative",
+  gap: "1em",
+  justifyContent: "space-between",
+  transition: "opacity 0.3s ease",
+
+  selectors: {
+    [`${tootwrapper}:hover &`]: {
+      opacity: 1,
+    },
+  },
+});
+
+globalStyle(`${tootbar} a`, {
+  color: "inherit",
+  textDecoration: "none",
 });
