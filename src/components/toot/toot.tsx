@@ -7,7 +7,6 @@ import {
   avatarImage,
   content,
   createdAt,
-  meta,
   name,
   reblog,
   toot,
@@ -16,6 +15,7 @@ import {
   tootLink,
   tootbar,
   tootwrapper,
+  displayName,
 } from "./style.css";
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
@@ -27,13 +27,14 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
   const minutes = seconds / 60;
   const hours = minutes / 60;
 
-  const formatter = new Intl.RelativeTimeFormat("en-US", {
+  const formatter = new Intl.RelativeTimeFormat(undefined, {
     numeric: "auto",
+    style: "narrow",
   });
 
   const timeAgo =
     hours < -24
-      ? created.toLocaleDateString("en-au")
+      ? created.toLocaleDateString()
       : formatter.format(
         ...(seconds < -60
           ? minutes < -60
@@ -47,55 +48,46 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
   return (
     <li class={tootwrapper}>
       <article class={toot}>
-        <div>
-          <img
-            class={avatarImage}
-            src={props.toot.account.avatarStatic}
-            alt=""
-          />
+        <img class={avatarImage} src={props.toot.account.avatarStatic} alt="" />
+        <div class={displayName}>
+          <span class={name}>
+            {loc.pathname.includes("person") ? (
+              props.toot.account.displayName
+            ) : (
+              <a
+                href={`/${loc.params.instance}/person/${accountUsername}/${props.toot.account.id}/`}
+              >
+                {props.toot.account.displayName}
+              </a>
+            )}
+          </span>
+          <span class={username}>
+            {accountUsername}
+            {accountDomain && (
+              <>
+                {/* not all domains allow browsing their feed */}
+                {/* would need to look up and cache domains ahead of time */}@
+                <a href={`/${accountDomain}/local`}>{accountDomain}</a>
+              </>
+            )}
+          </span>
         </div>
+        <span class={createdAt}>
+          {loc.pathname.includes("post") ? (
+            created.toLocaleString(undefined, {
+              dateStyle: "medium",
+              timeStyle: "short",
+            })
+          ) : (
+            <a
+              href={`/${loc.params.instance}/public/post/${props.toot.id}/`}
+              class={tootLink}
+            >
+              <span>{timeAgo}</span>
+            </a>
+          )}
+        </span>
         <div class={tootContent}>
-          <div class={meta}>
-            <div>
-              <span class={name}>
-                {loc.pathname.includes("person") ? (
-                  props.toot.account.displayName
-                ) : (
-                  <a
-                    href={`/${loc.params.instance}/person/${accountUsername}/${props.toot.account.id}/`}
-                  >
-                    {props.toot.account.displayName}
-                  </a>
-                )}
-              </span>
-              <span class={username}>
-                {accountUsername}
-                {accountDomain && (
-                  <>
-                    {/* not all domains allow browsing their feed */}
-                    {/* would need to look up and cache domains ahead of time */}
-                    @<a href={`/${accountDomain}/local`}>{accountDomain}</a>
-                  </>
-                )}
-              </span>
-            </div>
-            <span class={createdAt}>
-              {loc.pathname.includes("post") ? (
-                created.toLocaleString(undefined, {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })
-              ) : (
-                <a
-                  href={`/${loc.params.instance}/public/post/${props.toot.id}/`}
-                  class={tootLink}
-                >
-                  <span>{timeAgo}</span>
-                  <span>{props.toot.repliesCount} replies</span>
-                </a>
-              )}
-            </span>
-          </div>
           {props.toot.reblog ? (
             <>
               <>

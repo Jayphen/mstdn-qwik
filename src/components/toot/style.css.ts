@@ -8,7 +8,11 @@ export const tootwrapper = style({
 
 export const toot = style({
   display: "grid",
-  gridTemplateColumns: "3em 1fr",
+  gridTemplateAreas: `
+    "avatar name    time"
+    ".      content content"
+  `,
+  gridTemplateColumns: "3em 1fr 1fr",
   gap: "1em",
   padding: "0.75em",
   background: "white",
@@ -16,15 +20,37 @@ export const toot = style({
 
   "@media": {
     "(max-width: 550px)": {
-      gridTemplateColumns: "1fr",
-      gap: "0.25em",
+      gridTemplateAreas: `
+        "avatar time time"
+        "name name name"
+        "content content content"
+      `,
+      gridTemplateColumns: "1fr 1fr",
+      gap: "0.5em",
     },
   },
+});
+
+export const avatarImage = style({
+  gridArea: "avatar",
+  width: "100%",
+  borderRadius: "100%",
+
+  "@media": {
+    "(max-width: 550px)": {
+      width: "3em",
+    },
+  },
+});
+
+export const displayName = style({
+  gridArea: "name",
 });
 
 export const tootContent = style({
   display: "grid",
   gap: "0.5em",
+  gridArea: "content",
 });
 
 export const content = style({
@@ -63,12 +89,6 @@ globalStyle(`${content} p`, {
   margin: 0,
 });
 
-export const meta = style({
-  display: "flex",
-  gap: "0.5em",
-  alignItems: "center",
-});
-
 export const name = style({
   fontWeight: 700,
 });
@@ -82,23 +102,13 @@ export const username = style({
 export const createdAt = style({
   marginLeft: "auto",
   fontSize: "0.75em",
+  gridArea: "time",
 });
 
 export const tootLink = style({
   display: "flex",
   flexDirection: "column",
   alignItems: "flex-end",
-});
-
-export const avatarImage = style({
-  width: "100%",
-  borderRadius: "100%",
-
-  "@media": {
-    "(max-width: 550px)": {
-      width: "3em",
-    },
-  },
 });
 
 export const attachments = style({
