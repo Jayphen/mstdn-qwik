@@ -103,6 +103,12 @@ export const createdAt = style({
   marginLeft: "auto",
   fontSize: "0.75em",
   gridArea: "time",
+
+  "@media": {
+    "(max-width: 550px)": {
+      alignSelf: "center",
+    },
+  },
 });
 
 export const tootLink = style({
