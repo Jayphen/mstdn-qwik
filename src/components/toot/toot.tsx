@@ -32,16 +32,18 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
     style: "narrow",
   });
 
-  const timeAgo =
-    hours < -24
-      ? created.toLocaleDateString()
-      : formatter.format(
-        ...(seconds < -60
-          ? minutes < -60
-            ? [Math.ceil(hours), "hours"]
-            : [Math.ceil(minutes), "minutes"]
-          : [Math.ceil(seconds), "seconds"])
-      );
+  const timeAgo = (() => {
+    switch (true) {
+      case hours < -24:
+        return created.toLocaleDateString();
+      case minutes < -60:
+        return formatter.format(Math.ceil(hours), "hours");
+      case minutes < -1:
+        return formatter.format(Math.ceil(minutes), "minutes");
+      default:
+        return formatter.format(Math.ceil(seconds), "seconds");
+    }
+  })();
 
   const [accountUsername, accountDomain] = props.toot.account.acct.split("@");
 
