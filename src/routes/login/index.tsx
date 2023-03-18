@@ -54,8 +54,9 @@ export const useLogin = action$(
   },
   zod$({
     server: z.string().refine(isFQDN, (val) => ({
-      message: `That doesn't seem like a valid domain. It should look something like ${val.replace("@", "").split(".")[0]
-        }.com`,
+      message: `That doesn't seem like a valid domain. It should look something like ${
+        val.replace("@", "").split(".")[0]
+      }.com`,
     })),
   })
 );

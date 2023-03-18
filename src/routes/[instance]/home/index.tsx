@@ -19,15 +19,14 @@ export const getHomeFeed = loader$(async (ev) => {
   const client = await createClient(ev);
 
   try {
-    return await client.v1.timelines.listHome({ limit: 20 });
+    return client.v1.timelines.listHome({ limit: 20 });
   } catch (e: any) {
-    console.log(e);
-    return e.message;
+    return null;
   }
 });
 
 export default component$(() => {
   const toots = getHomeFeed();
 
-  return <Toots toots={toots.value} />;
+  return <>{toots.value ? <Toots toots={toots.value} /> : "oh no"}</>;
 });

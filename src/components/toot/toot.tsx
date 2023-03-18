@@ -17,6 +17,7 @@ import {
   tootwrapper,
   displayName,
 } from "./style.css";
+import { Fav } from "../fav/fav";
 
 export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
   const created = new Date(props.toot.createdAt);
@@ -133,15 +134,23 @@ export const Toot = component$((props: { toot: mastodon.v1.Status }) => {
           ) : null}
         </div>
       </article>
-      <div class={tootbar}>
-        <span>
-          <a href={`/${loc.params.instance}/public/post/${props.toot.id}/`}>
-            💬 {props.toot.repliesCount}
-          </a>
-        </span>
-        <span>🔄 {props.toot.reblogsCount}</span>
-        <span>⭐ {props.toot.favouritesCount}</span>
-      </div>
+      <Tootbar toot={props.toot.reblog ? props.toot.reblog : props.toot} />
     </li>
+  );
+});
+
+export const Tootbar = component$((props: { toot: mastodon.v1.Status }) => {
+  const loc = useLocation();
+
+  return (
+    <div class={tootbar}>
+      <span>
+        <a href={`/${loc.params.instance}/public/post/${props.toot.id}/`}>
+          💬 {props.toot.repliesCount}
+        </a>
+      </span>
+      <span>🔄 {props.toot.reblogsCount}</span>
+      <Fav toot={props.toot} />
+    </div>
   );
 });
