@@ -1,4 +1,9 @@
-# Qwik City App ⚡️
+# Mastodon / qwik city
+
+This was an experimental Mastodon client I built in order to learn Qwik. I dove in to this knowing little about either Qwik or Mastodon, so there are bugs. The client is usable though — I still use it today to browse Mastodon as the Qwik framework made it easy to build something that performs well.
+
+
+## Qwik City App ⚡️
 
 - [Qwik Docs](https://qwik.builder.io/)
 - [Discord](https://qwik.builder.io/chat)
